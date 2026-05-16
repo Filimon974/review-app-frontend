@@ -12,6 +12,8 @@ import ReviewDetails from "./pages/ReviewDetails";
 import AdminPlaces from "./pages/admin/AdminPlaces";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import EditPlace from "./pages/admin/EditPlace";
+import AdminRoute from "./components/AdminRoute";
+import AdminTags from "./pages/admin/AdminTags";
 
 function App() {
 
@@ -46,12 +48,23 @@ function App() {
 
         <Route path="/reviews/:id" element={<ReviewDetails />} />
 
-        <Route path="/admin/places" element={<AdminPlaces />} />
+        <Route path="/admin/places" element={
+          <AdminRoute>
+            <AdminPlaces />
+          </AdminRoute>} />
 
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>} />
+
+          <Route path="/admin/tags" element={
+            <AdminRoute>
+              <AdminTags />
+            </AdminRoute>} />
 
         <Route path="/admin/places/edit/:id" element={<EditPlace />} />
-
+      
       </Routes>
 
     </BrowserRouter>

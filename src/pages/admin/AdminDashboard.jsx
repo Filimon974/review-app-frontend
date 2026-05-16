@@ -1,218 +1,81 @@
-import MainLayout from "../../layouts/MainLayout";
-
-import {
-  FiMapPin,
-  FiUsers,
-  FiStar,
-  FiMessageCircle
-} from "react-icons/fi";
-
-
+import AdminLayout from "../../layouts/AdminLayout";
 
 function AdminDashboard() {
 
   return (
 
-    <MainLayout>
+    <AdminLayout>
 
-      <div className="mt-10">
+      <h1
+        className="
+        text-4xl
+        font-bold
+        "
+      >
+        Dashboard
+      </h1>
 
-        {/* HEADER */}
-        <div>
+      <div
+        className="
+        grid
+        grid-cols-1
+        md:grid-cols-3
+        gap-6
+        mt-10
+        "
+      >
 
-          <h1
-            className="
-            text-5xl
-            font-bold
-            "
-          >
-            Admin Dashboard
-          </h1>
+        <div
+          className="
+          bg-white
+          rounded-3xl
+          p-8
+          "
+        >
+          <h2 className="text-gray-500">
+            Total Places
+          </h2>
 
-          <p
-            className="
-            text-gray-500
-            mt-3
-            "
-          >
-            Manage your platform
+          <p className="text-5xl font-bold mt-4">
+            0
           </p>
-
         </div>
 
-
-
-        {/* STATS */}
         <div
           className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          xl:grid-cols-4
-          gap-6
-          mt-10
+          bg-white
+          rounded-3xl
+          p-8
           "
         >
+          <h2 className="text-gray-500">
+            Total Reviews
+          </h2>
 
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            p-6
-            "
-          >
-
-            <FiMapPin size={30} />
-
-            <h2
-              className="
-              text-4xl
-              font-bold
-              mt-5
-              "
-            >
-              120
-            </h2>
-
-            <p className="text-gray-500">
-              Places
-            </p>
-
-          </div>
-
-
-
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            p-6
-            "
-          >
-
-            <FiUsers size={30} />
-
-            <h2
-              className="
-              text-4xl
-              font-bold
-              mt-5
-              "
-            >
-              540
-            </h2>
-
-            <p className="text-gray-500">
-              Users
-            </p>
-
-          </div>
-
-
-
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            p-6
-            "
-          >
-
-            <FiStar size={30} />
-
-            <h2
-              className="
-              text-4xl
-              font-bold
-              mt-5
-              "
-            >
-              1.2K
-            </h2>
-
-            <p className="text-gray-500">
-              Reviews
-            </p>
-
-          </div>
-
-
-
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            p-6
-            "
-          >
-
-            <FiMessageCircle size={30} />
-
-            <h2
-              className="
-              text-4xl
-              font-bold
-              mt-5
-              "
-            >
-              85
-            </h2>
-
-            <p className="text-gray-500">
-              Reports
-            </p>
-
-          </div>
-
+          <p className="text-5xl font-bold mt-4">
+            0
+          </p>
         </div>
 
-
-
-        {/* QUICK ACTIONS */}
         <div
           className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          gap-6
-          mt-10
+          bg-white
+          rounded-3xl
+          p-8
           "
         >
+          <h2 className="text-gray-500">
+            Users
+          </h2>
 
-          <a
-            href="/admin/places"
-            className="
-            bg-black
-            text-white
-            rounded-3xl
-            p-8
-            text-2xl
-            font-bold
-            "
-          >
-            Manage Places
-          </a>
-
-
-
-          <a
-            href="/admin/reviews"
-            className="
-            bg-white
-            rounded-3xl
-            p-8
-            text-2xl
-            font-bold
-            "
-          >
-            Moderate Reviews
-          </a>
-
+          <p className="text-5xl font-bold mt-4">
+            0
+          </p>
         </div>
 
       </div>
 
-    </MainLayout>
+    </AdminLayout>
 
   );
 

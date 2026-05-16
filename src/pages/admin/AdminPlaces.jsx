@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MainLayout from "../../layouts/MainLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 import useFetch from "../../hooks/useFetch";
 import API from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
@@ -16,6 +16,9 @@ function AdminPlaces() {
     error
   } = useFetch("/places");
 
+  const {
+  data: tags
+} = useFetch("/tags");
 
 
   /*
@@ -45,6 +48,8 @@ function AdminPlaces() {
   const [uploading, setUploading] =
     useState(false);
 
+  const [selectedTags, setSelectedTags] = 
+    useState([]);
 
 
   /*
@@ -61,7 +66,86 @@ function AdminPlaces() {
     import.meta.env
       .VITE_CLOUDINARY_UPLOAD_PRESET;
 
+{/* TAGS */}
 
+<div>
+
+  <h3
+    className="
+    font-semibold
+    mb-3
+    "
+  >
+    Tags
+  </h3>
+
+  <div
+    className="
+    flex
+    flex-wrap
+    gap-3
+    "
+  >
+
+    {tags?.map(tag => (
+
+      <button
+        type="button"
+        key={tag._id}
+        onClick={() => {
+
+          if (
+            selectedTags.includes(
+              tag._id
+            )
+          ) {
+
+            setSelectedTags(
+              prev =>
+                prev.filter(
+                  id =>
+                    id !== tag._id
+                )
+            );
+
+          } else {
+
+            setSelectedTags(
+              prev => [
+                ...prev,
+                tag._id
+              ]
+            );
+
+          }
+
+        }}
+        className={`
+        px-4
+        py-2
+        rounded-full
+        border
+        transition
+
+        ${
+          selectedTags.includes(
+            tag._id
+          )
+            ? "bg-black text-white"
+            : "bg-white"
+        }
+        `}
+      >
+
+        {tag.name}
+
+      </button>
+
+    ))}
+
+  </div>
+
+</div>
 
   /*
   =========================
@@ -154,7 +238,8 @@ function AdminPlaces() {
             description,
             location,
             contactInfo,
-            photos: [photo]
+            photos: [photo],
+            tags: selectedTags
           },
 
           {
@@ -229,7 +314,7 @@ function AdminPlaces() {
 
   return (
 
-    <MainLayout>
+    <AdminLayout>
 
       <div className="mt-10">
 
@@ -545,7 +630,7 @@ function AdminPlaces() {
 
       </div>
 
-    </MainLayout>
+    </AdminLayout>
 
   );
 
