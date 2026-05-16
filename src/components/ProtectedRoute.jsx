@@ -1,10 +1,7 @@
-import {
-  Navigate
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-import {
-  useAuth
-} from "../context/AuthContext";
+import { useAuth }
+from "../context/AuthContext";
 
 
 
@@ -12,11 +9,34 @@ function ProtectedRoute({
   children
 }) {
 
-  const { user } =
-    useAuth();
+  const {
+    user,
+    authLoading
+  } = useAuth();
 
 
 
+  // WAIT FOR AUTH
+  if (authLoading) {
+
+    return (
+      <div
+        className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        "
+      >
+        Loading...
+      </div>
+    );
+
+  }
+
+
+
+  // NOT LOGGED IN
   if (!user) {
 
     return (

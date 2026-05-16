@@ -86,7 +86,9 @@ function Navbar() {
     Home
   </Link>
 
-
+    <Link to="/search">
+  Discover
+</Link>
 
   <Link to="/saved">
     Saved

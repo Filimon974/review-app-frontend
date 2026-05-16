@@ -1,96 +1,102 @@
-import { Link } from "react-router-dom";
-
 import {
   FiHome,
+  FiCompass,
+  FiPlusSquare,
   FiBookmark,
-  FiUser,
-  FiPlusCircle
+  FiUser
 } from "react-icons/fi";
 
-
+import { NavLink } from "react-router-dom";
 
 function MobileBottomNav() {
 
+  const navItems = [
+    {
+      path: "/",
+      icon: <FiHome />,
+      label: "Home"
+    },
+    {
+      path: "/discover",
+      icon: <FiCompass />,
+      label: "Discover"
+    },
+    {
+      path: "/create-review",
+      icon: <FiPlusSquare />,
+      label: "Review"
+    },
+    {
+      path: "/saved",
+      icon: <FiBookmark />,
+      label: "Saved"
+    },
+    {
+      path: "/profile",
+      icon: <FiUser />,
+      label: "Profile"
+    }
+  ];
+
   return (
 
-    <div
+    <nav
       className="
-      md:hidden
       fixed
       bottom-0
       left-0
-      w-full
+      right-0
       bg-white
       border-t
-      border-gray-200
-      flex
-      justify-around
-      items-center
-      py-3
       z-50
+      md:hidden
       "
     >
 
-      <Link
-        to="/"
+      <div
         className="
         flex
-        flex-col
+        justify-around
         items-center
-        text-xs
+        py-3
         "
       >
-        <FiHome className="text-xl" />
-        Home
-      </Link>
 
+        {navItems.map((item) => (
 
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) => `
+              flex
+              flex-col
+              items-center
+              text-xs
+              transition
 
-      <Link
-        to="/saved"
-        className="
-        flex
-        flex-col
-        items-center
-        text-xs
-        "
-      >
-        <FiBookmark className="text-xl" />
-        Saved
-      </Link>
+              ${
+                isActive
+                  ? "text-black"
+                  : "text-gray-400"
+              }
+            `}
+          >
 
+            <div className="text-xl">
+              {item.icon}
+            </div>
 
+            <span className="mt-1">
+              {item.label}
+            </span>
 
-      {/* CENTER BUTTON */}
-      <button
-        className="
-        bg-black
-        text-white
-        p-3
-        rounded-full
-        -mt-8
-        shadow-lg
-        "
-      >
-        <FiPlusCircle className="text-2xl" />
-      </button>
+          </NavLink>
 
+        ))}
 
+      </div>
 
-      <Link
-        to="/profile"
-        className="
-        flex
-        flex-col
-        items-center
-        text-xs
-        "
-      >
-        <FiUser className="text-xl" />
-        Profile
-      </Link>
-
-    </div>
+    </nav>
 
   );
 

@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import EditPlace from "./pages/admin/EditPlace";
 import AdminRoute from "./components/AdminRoute";
 import AdminTags from "./pages/admin/AdminTags";
+import Search from "./pages/Search";
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
             </AdminRoute>} />
 
         <Route path="/admin/places/edit/:id" element={<EditPlace />} />
+        <Route path="/search" element={<Search />} />
       
       </Routes>
 

@@ -1,21 +1,63 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Navigate }
+from "react-router-dom";
 
-function AdminRoute({ children }) {
+import { useAuth }
+from "../context/AuthContext";
 
-  const { user } = useAuth();
 
-  // not logged in
+
+function AdminRoute({
+  children
+}) {
+
+  const {
+    user,
+    authLoading
+  } = useAuth();
+
+
+
+  if (authLoading) {
+
+    return (
+      <div
+        className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        "
+      >
+        Loading...
+      </div>
+    );
+
+  }
+
+
+
   if (!user) {
-    return <Navigate to="/login" />;
+
+    return (
+      <Navigate to="/login" />
+    );
+
   }
 
-  // not admin
+
+
   if (user.role !== "admin") {
-    return <Navigate to="/" />;
+
+    return (
+      <Navigate to="/" />
+    );
+
   }
+
+
 
   return children;
+
 }
 
 export default AdminRoute;
