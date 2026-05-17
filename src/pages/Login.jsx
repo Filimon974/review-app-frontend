@@ -187,7 +187,7 @@ const passwordRef = useRef();
   }
   onKeyDown={(e) => {
     if (e.key === "Enter") {
-      handleLogin(e);
+      handleSubmit(e);
     }
   }}
 
