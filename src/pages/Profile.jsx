@@ -8,9 +8,11 @@ import { useAuth } from "../context/AuthContext";
 import {
   FiBookmark,
   FiStar,
-  FiEdit
+  FiEdit,
+  FiTrash2
 } from "react-icons/fi";
 
+import { Link } from "react-router-dom";
 
 
 function Profile() {
@@ -33,6 +35,42 @@ const UPLOAD_PRESET =
   import.meta.env
     .VITE_CLOUDINARY_UPLOAD_PRESET;
 
+    const handleDeleteReview =
+  async (reviewId) => {
+
+    const confirmDelete =
+      confirm(
+        "Delete this review?"
+      );
+
+    if (!confirmDelete) return;
+
+    try {
+
+      await API.delete(
+
+        `/reviews/${reviewId}`,
+
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+
+      );
+
+      window.location.reload();
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Failed to delete review");
+
+    }
+
+  };
 
     const handleAvatarUpload =
   async (e) => {
@@ -446,12 +484,87 @@ const UPLOAD_PRESET =
 
             {reviews.map(review => (
 
-              <ReviewCard
-                key={review._id}
-                review={review}
-              />
+  <div
+    key={review._id}
+    className="
+bg-white
+rounded-3xl
+overflow-hidden
+p-2
+"
+  >
 
-            ))}
+    <ReviewCard
+      review={review}
+    />
+
+
+
+    {/* ACTIONS */}
+    {/* ACTION BUTTONS */}
+<div
+  className="
+  mt-4
+  flex
+  gap-3
+  "
+>
+
+  {/* EDIT */}
+  <Link
+
+    to={`/reviews/edit/${review._id}`}
+
+    className="
+    flex-1
+    text-center
+    border
+    border-black
+    py-3
+    rounded-2xl
+    font-semibold
+    hover:bg-black
+    hover:text-white
+    transition
+    "
+  >
+
+    Edit
+
+  </Link>
+
+
+
+  {/* DELETE */}
+  <button
+
+    onClick={() =>
+      handleDeleteReview(
+        review._id
+      )
+    }
+
+    className="
+    flex-1
+    bg-red-500
+    text-white
+    py-3
+    rounded-2xl
+    font-semibold
+    hover:bg-red-600
+    transition
+    "
+  >
+
+    Delete
+
+  </button>
+
+</div>
+
+  </div>
+
+))}
 
           </div>
 

@@ -111,7 +111,7 @@ function ReviewCard({ review }) {
             text-lg
             "
           >
-            {review.user?.name || "Anonymous"}
+            {review.user?.username  || "Anonymous"}
           </h3>
 
           <div

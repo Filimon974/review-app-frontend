@@ -465,39 +465,95 @@ function AdminPlaces() {
 
 
           {/* IMAGE */}
-          <div>
+<div>
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={
-                handleImageUpload
-              }
-            />
+  <label
+    className="
+    block
+    font-semibold
+    mb-3
+    "
+  >
+    Place Image
+  </label>
 
-            {uploading && (
-              <p className="mt-2">
-                Uploading...
-              </p>
-            )}
+  <label
+    className="
+    flex
+    flex-col
+    items-center
+    justify-center
+    border-2
+    border-dashed
+    border-gray-300
+    rounded-3xl
+    p-10
+    cursor-pointer
+    hover:bg-gray-50
+    transition
+    "
+  >
 
-            {photo && (
+    <div
+      className="
+      text-5xl
+      "
+    >
+      📷
+    </div>
 
-              <img
-                src={photo}
-                alt="Preview"
-                className="
-                w-40
-                h-40
-                object-cover
-                rounded-2xl
-                mt-4
-                "
-              />
+    <p
+      className="
+      mt-4
+      font-medium
+      "
+    >
+      {
+        uploading
+          ? "Uploading..."
+          : "Click to upload image"
+      }
+    </p>
 
-            )}
+    <p
+      className="
+      text-sm
+      text-gray-500
+      mt-1
+      "
+    >
+      PNG, JPG, WEBP
+    </p>
 
-          </div>
+    <input
+      type="file"
+      hidden
+      accept="image/*"
+      onChange={handleImageUpload}
+    />
+
+  </label>
+
+  {photo && (
+
+    <div className="mt-6">
+
+      <img
+        src={photo}
+        alt="Preview"
+        className="
+        w-full
+        h-72
+        object-cover
+        rounded-3xl
+        "
+      />
+
+    </div>
+
+  )}
+
+</div>
 
 
 

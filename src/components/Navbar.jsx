@@ -163,7 +163,7 @@ function Navbar() {
 
 
         {/* SEARCH */}
-        <div
+        {/* <div
           className="
           flex
           items-center
@@ -189,7 +189,7 @@ function Navbar() {
             "
           />
 
-        </div>
+        </div> */}
 
 
 

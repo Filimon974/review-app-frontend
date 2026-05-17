@@ -1,50 +1,56 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import MainLayout
-  from "../layouts/MainLayout";
+import { useNavigate, useParams } from "react-router-dom";
 
-import useFetch
-  from "../hooks/useFetch";
+import MainLayout from "../layouts/MainLayout";
 
-import API
-  from "../services/api";
+import useFetch from "../hooks/useFetch";
 
-import { useAuth }
-  from "../context/AuthContext";
+import API from "../services/api";
+
+import { useAuth } from "../context/AuthContext";
 
 import {
   FiStar,
-  FiUpload
+  FiUpload,
+  FiX
 } from "react-icons/fi";
 
 
 
-function CreateReview() {
+function EditReview() {
+
+  const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const { token } = useAuth();
 
 
 
-/*
-  =========================
-  FETCH Tags
-  =========================
-  */
-
-const {
-  data: tags
-} = useFetch("/tags");
-
-
   /*
   =========================
-  FETCH PLACES
+  FETCH REVIEW
   =========================
   */
 
   const {
-    data: places
-  } = useFetch("/places");
+    data: review,
+    loading,
+    error
+  } = useFetch(`/reviews/${id}`);
+
+
+
+  /*
+  =========================
+  FETCH TAGS
+  =========================
+  */
+
+  const {
+    data: tags
+  } = useFetch("/tags");
 
 
 
@@ -53,9 +59,6 @@ const {
   FORM STATE
   =========================
   */
-
-  const [placeId, setPlaceId] =
-    useState("");
 
   const [rating, setRating] =
     useState(0);
@@ -66,14 +69,15 @@ const {
   const [photos, setPhotos] =
     useState([]);
 
+  const [selectedTags, setSelectedTags] =
+    useState([]);
+
   const [uploading, setUploading] =
     useState(false);
 
   const [submitting, setSubmitting] =
     useState(false);
 
-    const [selectedTags, setSelectedTags] =
-  useState([]);
 
 
   /*
@@ -94,6 +98,34 @@ const {
 
   /*
   =========================
+  PREFILL DATA
+  =========================
+  */
+
+  useEffect(() => {
+
+    if (review) {
+
+      setRating(review.rating || 0);
+
+      setText(review.reviewText || "");
+
+      setPhotos(review.photos || []);
+
+      setSelectedTags(
+        review.tags?.map(
+          tag => tag._id
+        ) || []
+      );
+
+    }
+
+  }, [review]);
+
+
+
+  /*
+  =========================
   PHOTO UPLOAD
   =========================
   */
@@ -107,8 +139,6 @@ const {
           Array.from(e.target.files);
 
         setUploading(true);
-
-
 
         let uploadedPhotos = [];
 
@@ -181,7 +211,25 @@ const {
 
   /*
   =========================
-  SUBMIT REVIEW
+  REMOVE IMAGE
+  =========================
+  */
+
+  const handleRemovePhoto = (photoUrl) => {
+
+  setPhotos(prev =>
+    prev.filter(
+      photo => photo !== photoUrl
+    )
+  );
+
+};
+
+
+
+  /*
+  =========================
+  UPDATE REVIEW
   =========================
   */
 
@@ -196,12 +244,11 @@ const {
 
 
 
-        await API.post(
+        await API.put(
 
-          "/reviews",
+          `/reviews/${id}`,
 
           {
-            place: placeId,
             rating,
             reviewText: text,
             tags: selectedTags,
@@ -220,21 +267,20 @@ const {
 
 
         alert(
-          "Review created successfully"
+          "Review updated successfully"
         );
 
 
 
-        setPlaceId("");
-        setRating(0);
-        setText("");
-        setPhotos([]);
+        navigate("/profile");
 
       } catch (error) {
 
         console.log(error);
 
-        alert("Failed to create review");
+        alert(
+          "Failed to update review"
+        );
 
       } finally {
 
@@ -243,6 +289,42 @@ const {
       }
 
     };
+
+
+
+  if (loading) {
+
+    return (
+
+      <MainLayout>
+
+        <div className="mt-20 text-center">
+          Loading...
+        </div>
+
+      </MainLayout>
+
+    );
+
+  }
+
+
+
+  if (error) {
+
+    return (
+
+      <MainLayout>
+
+        <div className="mt-20 text-center text-red-500">
+          {error}
+        </div>
+
+      </MainLayout>
+
+    );
+
+  }
 
 
 
@@ -272,7 +354,7 @@ const {
             font-bold
             "
           >
-            Create Review
+            Edit Review
           </h1>
 
 
@@ -281,60 +363,6 @@ const {
             onSubmit={handleSubmit}
             className="mt-8 space-y-6"
           >
-
-            {/* PLACE SELECT */}
-            <div>
-
-              <label
-                className="
-                block
-                font-semibold
-                mb-2
-                "
-              >
-                Select Place
-              </label>
-
-              <select
-
-                value={placeId}
-
-                onChange={(e) =>
-                  setPlaceId(e.target.value)
-                }
-
-                required
-
-                className="
-                w-full
-                border
-                rounded-2xl
-                px-4
-                py-4
-                outline-none
-                "
-              >
-
-                <option value="">
-                  Choose place
-                </option>
-
-                {places?.map(place => (
-
-                  <option
-                    key={place._id}
-                    value={place._id}
-                  >
-                    {place.name}
-                  </option>
-
-                ))}
-
-              </select>
-
-            </div>
-
-
 
             {/* RATING */}
             <div>
@@ -354,28 +382,23 @@ const {
                 {[1,2,3,4,5].map(star => (
 
                   <button
-
                     type="button"
-
                     key={star}
-
                     onClick={() =>
                       setRating(star)
                     }
-
                   >
 
                     <FiStar
-
                       className={`
                       text-3xl
+                      transition
                       ${
                         star <= rating
                           ? "text-yellow-500 fill-yellow-500"
                           : "text-gray-300"
                       }
                       `}
-
                     />
 
                   </button>
@@ -402,21 +425,15 @@ const {
               </label>
 
               <textarea
-
                 rows="6"
-
                 value={text}
-
                 onChange={(e) =>
                   setText(e.target.value)
                 }
-
                 placeholder="
                 Share your experience...
                 "
-
                 required
-
                 className="
                 w-full
                 border
@@ -432,7 +449,89 @@ const {
 
 
 
-            {/* PHOTO UPLOAD */}
+            {/* TAGS */}
+            <div>
+
+              <h3
+                className="
+                font-semibold
+                mb-3
+                "
+              >
+                Tags
+              </h3>
+
+              <div
+                className="
+                flex
+                flex-wrap
+                gap-3
+                "
+              >
+
+                {tags?.map(tag => (
+
+                  <button
+                    type="button"
+                    key={tag._id}
+                    onClick={() => {
+
+                      if (
+                        selectedTags.includes(
+                          tag._id
+                        )
+                      ) {
+
+                        setSelectedTags(
+                          prev =>
+                            prev.filter(
+                              id =>
+                                id !== tag._id
+                            )
+                        );
+
+                      } else {
+
+                        setSelectedTags(
+                          prev => [
+                            ...prev,
+                            tag._id
+                          ]
+                        );
+
+                      }
+
+                    }}
+                    className={`
+                    px-4
+                    py-2
+                    rounded-full
+                    border
+                    transition
+
+                    ${
+                      selectedTags.includes(
+                        tag._id
+                      )
+                        ? "bg-black text-white"
+                        : "bg-white"
+                    }
+                    `}
+                  >
+
+                    {tag.name}
+
+                  </button>
+
+                ))}
+
+              </div>
+
+            </div>
+
+
+
+            {/* IMAGE UPLOAD */}
             <div>
 
               <label
@@ -442,7 +541,7 @@ const {
                 mb-3
                 "
               >
-                Photos
+                Update Photos
               </label>
 
               <label
@@ -466,23 +565,17 @@ const {
                 {
                   uploading
                     ? "Uploading..."
-                    : "Upload Photos"
+                    : "Upload More Photos"
                 }
 
                 <input
-
                   type="file"
-
                   multiple
-
                   hidden
-
                   accept="image/*"
-
                   onChange={
                     handlePhotoUpload
                   }
-
                 />
 
               </label>
@@ -491,7 +584,7 @@ const {
 
 
 
-            {/* PREVIEW */}
+            {/* PHOTO PREVIEW */}
             {
               photos.length > 0 && (
 
@@ -506,21 +599,47 @@ const {
 
                   {photos.map((photo, i) => (
 
-                    <img
-
+                    <div
                       key={i}
+                      className="relative"
+                    >
 
-                      src={photo}
+                      <img
+                        src={photo}
+                        alt="review"
+                        className="
+                        w-full
+                        h-40
+                        object-cover
+                        rounded-2xl
+                        "
+                      />
 
-                      alt="review"
 
-                      className="
-                      w-full
-                      h-40
-                      object-cover
-                      rounded-2xl
-                      "
-                    />
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleRemovePhoto(
+                            photo
+                          )
+                        }
+                        className="
+                        absolute
+                        top-2
+                        right-2
+                        bg-black
+                        text-white
+                        p-2
+                        rounded-full
+                        "
+                      >
+
+                        <FiX />
+
+                      </button>
+
+                    </div>
 
                   ))}
 
@@ -529,90 +648,11 @@ const {
               )
             }
 
-            <div>
 
-  <h3
-    className="
-    font-semibold
-    mb-3
-    "
-  >
-    Tags
-  </h3>
-
-  <div
-    className="
-    flex
-    flex-wrap
-    gap-3
-    "
-  >
-
-    {tags?.map(tag => (
-
-      <button
-        type="button"
-        key={tag._id}
-        onClick={() => {
-
-          if (
-            selectedTags.includes(
-              tag._id
-            )
-          ) {
-
-            setSelectedTags(
-              prev =>
-                prev.filter(
-                  id =>
-                    id !== tag._id
-                )
-            );
-
-          } else {
-
-            setSelectedTags(
-              prev => [
-                ...prev,
-                tag._id
-              ]
-            );
-
-          }
-
-        }}
-        className={`
-        px-4
-        py-2
-        rounded-full
-        border
-        transition
-
-        ${
-          selectedTags.includes(
-            tag._id
-          )
-            ? "bg-black text-white"
-            : "bg-white"
-        }
-        `}
-      >
-
-        {tag.name}
-
-      </button>
-
-    ))}
-
-  </div>
-
-</div>
 
             {/* SUBMIT */}
             <button
-
               disabled={submitting}
-
               className="
               w-full
               bg-black
@@ -627,8 +667,8 @@ const {
 
               {
                 submitting
-                  ? "Publishing..."
-                  : "Publish Review"
+                  ? "Updating..."
+                  : "Update Review"
               }
 
             </button>
@@ -645,4 +685,4 @@ const {
 
 }
 
-export default CreateReview;
+export default EditReview;

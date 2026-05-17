@@ -1,6 +1,4 @@
-import {
-  useState
-} from "react";
+import { useState, useRef } from "react";
 
 import {
   useNavigate,
@@ -39,7 +37,8 @@ function Login() {
   const [error, setError] =
     useState("");
 
-
+  const emailRef = useRef();
+const passwordRef = useRef();
 
   const handleSubmit =
     async (e) => {
@@ -150,15 +149,19 @@ function Login() {
           {/* EMAIL */}
           <input
 
-            type="email"
-
-            placeholder="Email"
-
-            value={email}
-
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            ref={emailRef}
+  type="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) =>
+    setEmail(e.target.value)
+  }
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      passwordRef.current.focus();
+    }
+  }}
 
             className="
             w-full
@@ -175,15 +178,18 @@ function Login() {
           {/* PASSWORD */}
           <input
 
-            type="password"
-
-            placeholder="Password"
-
-            value={password}
-
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            ref={passwordRef}
+  type="password"
+  placeholder="Password"
+  value={password}
+  onChange={(e) =>
+    setPassword(e.target.value)
+  }
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      handleLogin(e);
+    }
+  }}
 
             className="
             w-full

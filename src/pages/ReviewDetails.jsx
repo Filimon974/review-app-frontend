@@ -166,7 +166,54 @@ function ReviewDetails() {
               {review.reviewText}
             </p>
 
+            {/* TAGS */}
+{
+  review.tags?.length > 0 && (
 
+    <div className="mt-8">
+
+      <h2
+        className="
+        text-2xl
+        font-bold
+        mb-4
+        "
+      >
+        Tags
+      </h2>
+
+      <div
+        className="
+        flex
+        flex-wrap
+        gap-3
+        "
+      >
+
+        {review.tags.map(tag => (
+
+          <div
+            key={tag._id}
+            className="
+            px-4
+            py-2
+            bg-gray-100
+            rounded-full
+            text-sm
+            font-medium
+            "
+          >
+            #{tag.name}
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  )
+}
 
             {/* GALLERY */}
             {

@@ -4,8 +4,8 @@ import HeroSection from "../components/HeroSection";
 
 import TrendingSection from "../components/TrendingSection";
 
-import RecentReviewsSection
-  from "../components/RecentReviewsSection";
+// import RecentReviewsSection
+//   from "../components/RecentReviewsSection";
 
 import TrendingReviewsSection
   from "../components/TrendingReviewsSection";
@@ -30,7 +30,7 @@ function Home() {
 
 
 
-      <RecentReviewsSection />
+      {/* <RecentReviewsSection /> */}
 
 
 

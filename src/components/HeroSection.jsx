@@ -99,7 +99,7 @@ function HeroSection() {
 
 
         {/* SEARCH BAR */}
-        <div
+        {/* <div
           className="
           mt-8
           bg-white
@@ -132,7 +132,7 @@ function HeroSection() {
             "
           />
 
-        </div>
+        </div> */}
 
 
 

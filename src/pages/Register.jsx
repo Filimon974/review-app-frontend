@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import API from "../services/api";
@@ -6,12 +6,15 @@ import API from "../services/api";
 function Register() {
   const navigate = useNavigate();
 
-  // 1. Changed state from name to username
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const usernameRef = useRef();
+const emailRef = useRef();
+const passwordRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,49 +87,89 @@ function Register() {
 
           {/* 3. Updated input field for Username */}
           <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="
-            w-full
-            mt-6
-            p-4
-            rounded-2xl
-            border
-            outline-none
-            "
-          />
+  ref={usernameRef}
+  type="text"
+  placeholder="Username"
+  value={username}
+  onChange={(e) =>
+    setUsername(e.target.value)
+  }
+  onKeyDown={(e) => {
+
+    if (e.key === "Enter") {
+
+      e.preventDefault();
+
+      emailRef.current.focus();
+
+    }
+
+  }}
+  className="
+  w-full
+  mt-6
+  p-4
+  rounded-2xl
+  border
+  outline-none
+  "
+/>
 
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="
-            w-full
-            mt-4
-            p-4
-            rounded-2xl
-            border
-            outline-none
-            "
-          />
+  ref={emailRef}
+  type="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) =>
+    setEmail(e.target.value)
+  }
+  onKeyDown={(e) => {
+
+    if (e.key === "Enter") {
+
+      e.preventDefault();
+
+      passwordRef.current.focus();
+
+    }
+
+  }}
+  className="
+  w-full
+  mt-4
+  p-4
+  rounded-2xl
+  border
+  outline-none
+  "
+/>
 
           <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="
-            w-full
-            mt-4
-            p-4
-            rounded-2xl
-            border
-            outline-none
-            "
-          />
+  ref={passwordRef}
+  type="password"
+  placeholder="Password"
+  value={password}
+  onChange={(e) =>
+    setPassword(e.target.value)
+  }
+  onKeyDown={(e) => {
+
+    if (e.key === "Enter") {
+
+      handleSubmit(e);
+
+    }
+
+  }}
+  className="
+  w-full
+  mt-4
+  p-4
+  rounded-2xl
+  border
+  outline-none
+  "
+/>
 
           <button
             disabled={loading}

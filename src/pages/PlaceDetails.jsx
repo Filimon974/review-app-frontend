@@ -14,6 +14,7 @@ function PlaceDetails() {
   const { token } = useAuth();
   const [saving, setSaving] = useState(false);
   const [sortBy, setSortBy] = useState("latest");
+  const [saved, setSaved] = useState(false);
 
   const {
     data: place,
@@ -56,7 +57,7 @@ function PlaceDetails() {
   );
 
 
-  const handleSave = async () => {
+const handleSave = async () => {
 
   try {
 
@@ -85,7 +86,7 @@ function PlaceDetails() {
 
     );
 
-    alert("Place saved!");
+    setSaved(!saved);
 
   } catch (error) {
 
@@ -180,25 +181,34 @@ function PlaceDetails() {
 
 
               <button
-                onClick={handleSave}
-                disabled={saving}
-                className="
-                flex
-                items-center
-                gap-2
-                bg-black
-                text-white
-                px-5
-                py-3
-                rounded-full
-                "
-              >
+  onClick={handleSave}
+  disabled={saving}
+  className={`
+    flex
+    items-center
+    gap-2
+    px-5
+    py-3
+    rounded-full
+    transition
 
-                <FiBookmark />
+    ${
+      saved
+        ? "bg-green-600 text-white"
+        : "bg-black text-white"
+    }
+  `}
+>
 
-                {saving ? "Saving..." : "Save"}
+  <FiBookmark />
 
-              </button>
+  {saving
+    ? "Saving..."
+    : saved
+    ? "Saved"
+    : "Save"}
+
+</button>
 
             </div>
 
@@ -330,39 +340,82 @@ function PlaceDetails() {
 {
   reviews?.length > 0 && (
 
-    <div className="mt-12">
+    <div>
 
-      <h2
-        className="
-        text-2xl
-        font-bold
-        mb-6
-        "
-      >
-        Review Gallery
-      </h2>
+  <label
+    className="
+    block
+    font-semibold
+    mb-3
+    "
+  >
+    Review Photos
+  </label>
 
 
+
+  {/* UPLOAD BOX */}
+  <label
+    className="
+    flex
+    items-center
+    justify-center
+    gap-3
+    border-2
+    border-dashed
+    rounded-2xl
+    py-10
+    cursor-pointer
+    hover:bg-gray-50
+    transition
+    "
+  >
+
+    <FiUpload className="text-xl" />
+
+    {
+      uploading
+        ? "Uploading..."
+        : "Add More Photos"
+    }
+
+    <input
+      type="file"
+      multiple
+      hidden
+      accept="image/*"
+      onChange={handlePhotoUpload}
+    />
+
+  </label>
+
+
+
+  {/* IMAGE GRID */}
+  {
+    photos.length > 0 && (
 
       <div
         className="
         grid
         grid-cols-2
-        md:grid-cols-4
+        md:grid-cols-3
         gap-4
+        mt-6
         "
       >
 
-        {reviews
-          .flatMap(
-            review => review.photos || []
-          )
-          .slice(0, 8)
-          .map((photo, index) => (
+        {photos.map((photo, index) => (
+
+          <div
+            key={index}
+            className="
+            relative
+            group
+            "
+          >
 
             <img
-
-              key={index}
 
               src={photo}
 
@@ -377,11 +430,50 @@ function PlaceDetails() {
 
             />
 
-          ))}
+
+
+            {/* REMOVE BUTTON */}
+            <button
+
+              type="button"
+
+              onClick={() =>
+                handleRemovePhoto(photo)
+              }
+
+              className="
+              absolute
+              top-3
+              right-3
+              w-9
+              h-9
+              rounded-full
+              bg-black/80
+              text-white
+              flex
+              items-center
+              justify-center
+              opacity-0
+              group-hover:opacity-100
+              transition
+              "
+
+            >
+
+              <FiX />
+
+            </button>
+
+          </div>
+
+        ))}
 
       </div>
 
-    </div>
+    )
+  }
+
+</div>
 
   )
 }
