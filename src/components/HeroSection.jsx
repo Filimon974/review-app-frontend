@@ -3,6 +3,7 @@ import heroImage from "../assets/hero.jpg";
 import {
   FiSearch
 } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 
 
@@ -147,7 +148,7 @@ function HeroSection() {
           md:w-auto
           "
         >
-
+        <Link to="/search">
           <button
             className="
             bg-white
@@ -162,10 +163,12 @@ function HeroSection() {
           >
             Explore Places
           </button>
+        </Link>
+          
 
 
-
-          <button
+        <Link to="/create-review">
+            <button
             className="
             bg-orange-500
             text-white
@@ -180,6 +183,8 @@ function HeroSection() {
             Write Review
           </button>
 
+        </Link>
+          
         </div>
 
       </div>

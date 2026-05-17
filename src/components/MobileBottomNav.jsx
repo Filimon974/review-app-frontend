@@ -17,7 +17,7 @@ function MobileBottomNav() {
       label: "Home"
     },
     {
-      path: "/discover",
+      path: "/search",
       icon: <FiCompass />,
       label: "Discover"
     },

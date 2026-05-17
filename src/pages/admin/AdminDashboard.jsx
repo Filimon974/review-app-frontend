@@ -1,6 +1,54 @@
 import AdminLayout from "../../layouts/AdminLayout";
 
+import useFetch from "../../hooks/useFetch";
+
 function AdminDashboard() {
+
+  const {
+
+    data,
+    loading,
+    error
+
+  } = useFetch("/admin/dashboard-stats");
+
+
+
+  if (loading) {
+
+    return (
+
+      <AdminLayout>
+
+        <div className="mt-10">
+          Loading...
+        </div>
+
+      </AdminLayout>
+
+    );
+
+  }
+
+
+
+  if (error) {
+
+    return (
+
+      <AdminLayout>
+
+        <div className="mt-10 text-red-500">
+          {error}
+        </div>
+
+      </AdminLayout>
+
+    );
+
+  }
+
+
 
   return (
 
@@ -15,6 +63,8 @@ function AdminDashboard() {
         Dashboard
       </h1>
 
+
+
       <div
         className="
         grid
@@ -25,6 +75,7 @@ function AdminDashboard() {
         "
       >
 
+        {/* PLACES */}
         <div
           className="
           bg-white
@@ -32,15 +83,26 @@ function AdminDashboard() {
           p-8
           "
         >
+
           <h2 className="text-gray-500">
             Total Places
           </h2>
 
-          <p className="text-5xl font-bold mt-4">
-            0
+          <p
+            className="
+            text-5xl
+            font-bold
+            mt-4
+            "
+          >
+            {data.totalPlaces}
           </p>
+
         </div>
 
+
+
+        {/* REVIEWS */}
         <div
           className="
           bg-white
@@ -48,15 +110,26 @@ function AdminDashboard() {
           p-8
           "
         >
+
           <h2 className="text-gray-500">
             Total Reviews
           </h2>
 
-          <p className="text-5xl font-bold mt-4">
-            0
+          <p
+            className="
+            text-5xl
+            font-bold
+            mt-4
+            "
+          >
+            {data.totalReviews}
           </p>
+
         </div>
 
+
+
+        {/* USERS */}
         <div
           className="
           bg-white
@@ -64,13 +137,21 @@ function AdminDashboard() {
           p-8
           "
         >
+
           <h2 className="text-gray-500">
             Users
           </h2>
 
-          <p className="text-5xl font-bold mt-4">
-            0
+          <p
+            className="
+            text-5xl
+            font-bold
+            mt-4
+            "
+          >
+            {data.totalUsers}
           </p>
+
         </div>
 
       </div>

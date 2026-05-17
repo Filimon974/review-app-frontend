@@ -48,7 +48,7 @@ function AdminLayout({ children }) {
 
           {/* LOGO */}
           <Link
-            to="/admin/dashboard"
+            to="/admin"
             className="
             text-2xl
             font-bold
@@ -69,7 +69,7 @@ function AdminLayout({ children }) {
           >
 
             <Link
-              to="/admin/dashboard"
+              to="/admin"
               className="
               font-medium
               hover:text-orange-500
