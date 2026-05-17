@@ -220,16 +220,7 @@ function Navbar() {
 
             <>
 
-              {/* USER */}
-              <div
-                className="
-                font-semibold
-                "
-              >
-                {user.username}
-              </div>
-
-
+              
 
               <Link to="/create-review">
                 Write Review

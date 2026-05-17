@@ -19,29 +19,32 @@ function PlaceCard({ place }) {
       duration-300
       "
     >
+      
       {/* IMAGE CONTAINER */}
-      <div
-        className="
-        relative
-        h-[240px]
-        overflow-hidden
-        "
-      >
-        <img
-          src={
-          place.photos?.[0] ||
-          "https://via.placeholder.com/400"
-        }
-          alt={place.name}
-          className="
-          w-full
-          h-full
-          object-cover
-          hover:scale-105
-          transition
-          duration-500
-          "
-        />
+<div
+  className="
+  relative
+  h-[240px]
+  bg-gray-50
+  overflow-hidden
+  "
+>
+  <img
+    src={
+      place.photos?.[0] ||
+      "https://via.placeholder.com/400"
+    }
+    alt={place.name}
+    className="
+    w-full
+    h-full
+    object-contain
+    hover:scale-105
+    transition
+    duration-500
+    "
+  />
+
 
         {/* RATING BADGE */}
         <div

@@ -173,22 +173,23 @@ function ReviewCard({ review }) {
 
 
 
+      
       {/* PHOTO */}
-      {review.photos?.[0] && (
+{review.photos?.[0] && (
+  <img
+    src={review.photos[0]}
+    alt="Review"
+    className="
+    w-full
+    h-[260px]
+    object-contain
+    bg-gray-50
+    rounded-2xl
+    mt-4
+    "
+  />
+)}
 
-        <img
-          src={review.photos[0]}
-          alt="Review"
-          className="
-          w-full
-          h-[260px]
-          object-cover
-          rounded-2xl
-          mt-4
-          "
-        />
-
-      )}
 
 
 

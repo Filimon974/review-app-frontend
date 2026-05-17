@@ -13,9 +13,18 @@ from "../hooks/useFetch";
 import PlaceCard
 from "../components/PlaceCard";
 
+import ReviewCard
+from "../components/ReviewCard";
+
 
 
 function Search() {
+
+  /*
+  =========================
+  TAGS
+  =========================
+  */
 
   const {
     data: tags
@@ -23,7 +32,24 @@ function Search() {
 
 
 
-  const [places, setPlaces] =
+  /*
+  =========================
+  MODE
+  =========================
+  */
+
+  const [mode, setMode] =
+    useState("places");
+
+
+
+  /*
+  =========================
+  RESULTS
+  =========================
+  */
+
+  const [results, setResults] =
     useState([]);
 
   const [loading, setLoading] =
@@ -46,6 +72,9 @@ function Search() {
   const [tag, setTag] =
     useState("");
 
+  const [user, setUser] =
+    useState("");
+
   const [sort, setSort] =
     useState("newest");
 
@@ -56,39 +85,83 @@ function Search() {
 
   /*
   =========================
-  FETCH PLACES
+  FETCH DATA
   =========================
   */
 
   useEffect(() => {
 
-    const fetchPlaces =
+    const fetchData =
       async () => {
 
         try {
 
           setLoading(true);
 
-          const response =
-            await API.get(
 
-              "/places/search",
 
-              {
-                params: {
-                  search,
-                  category,
-                  tag,
-                  sort,
-                  rating
+          /*
+          =========================
+          PLACES SEARCH
+          =========================
+          */
+
+          if (mode === "places") {
+
+            const response =
+              await API.get(
+
+                "/places/search",
+
+                {
+                  params: {
+                    search,
+                    category,
+                    sort,
+                    rating
+                  }
                 }
-              }
 
+              );
+
+            setResults(
+              response.data
             );
 
-          setPlaces(
-            response.data
-          );
+          }
+
+
+
+          /*
+          =========================
+          REVIEWS SEARCH
+          =========================
+          */
+
+          if (mode === "reviews") {
+
+            const response =
+              await API.get(
+
+                "/reviews/search",
+
+                {
+                  params: {
+                    search,
+                    category,
+                    tag,
+                    user,
+                    sort
+                  }
+                }
+
+              );
+
+            setResults(
+              response.data
+            );
+
+          }
 
         } catch (error) {
 
@@ -104,14 +177,18 @@ function Search() {
 
 
 
-    fetchPlaces();
+    fetchData();
 
   }, [
+
+    mode,
     search,
     category,
     tag,
+    user,
     sort,
     rating
+
   ]);
 
 
@@ -122,14 +199,102 @@ function Search() {
 
       <div className="mt-10">
 
-        <h1
+        {/* HEADER */}
+        <div
           className="
-          text-4xl
-          font-bold
+          flex
+          flex-col
+          md:flex-row
+          md:items-center
+          md:justify-between
+          gap-4
           "
         >
-          Discover Places
-        </h1>
+
+          <div>
+
+            <h1
+              className="
+              text-4xl
+              font-bold
+              "
+            >
+              Discover
+            </h1>
+
+            <p
+              className="
+              text-gray-500
+              mt-2
+              "
+            >
+              Explore places and experiences
+            </p>
+
+          </div>
+
+
+
+          {/* MODE SWITCH */}
+          <div
+            className="
+            flex
+            bg-gray-100
+            rounded-full
+            p-1
+            w-fit
+            "
+          >
+
+            <button
+
+              onClick={() =>
+                setMode("places")
+              }
+
+              className={`
+              px-5
+              py-2
+              rounded-full
+              transition
+
+              ${
+                mode === "places"
+                  ? "bg-black text-white"
+                  : "text-gray-600"
+              }
+              `}
+            >
+              Places
+            </button>
+
+
+
+            <button
+
+              onClick={() =>
+                setMode("reviews")
+              }
+
+              className={`
+              px-5
+              py-2
+              rounded-full
+              transition
+
+              ${
+                mode === "reviews"
+                  ? "bg-black text-white"
+                  : "text-gray-600"
+              }
+              `}
+            >
+              Reviews
+            </button>
+
+          </div>
+
+        </div>
 
 
 
@@ -150,13 +315,21 @@ function Search() {
           {/* SEARCH */}
           <input
             type="text"
-            placeholder="Search places..."
+
+            placeholder={
+              mode === "places"
+                ? "Search places..."
+                : "Search reviews by place..."
+            }
+
             value={search}
+
             onChange={(e) =>
               setSearch(
                 e.target.value
               )
             }
+
             className="
             border
             rounded-2xl
@@ -168,12 +341,15 @@ function Search() {
 
           {/* CATEGORY */}
           <select
+
             value={category}
+
             onChange={(e) =>
               setCategory(
                 e.target.value
               )
             }
+
             className="
             border
             rounded-2xl
@@ -193,87 +369,136 @@ function Search() {
               Hotel
             </option>
 
-          </select>
-
-
-
-          {/* TAG */}
-          <select
-            value={tag}
-            onChange={(e) =>
-              setTag(
-                e.target.value
-              )
-            }
-            className="
-            border
-            rounded-2xl
-            p-4
-            "
-          >
-
-            <option value="">
-              All Tags
+            <option value="cafe">
+              Cafe
             </option>
 
-            {tags?.map(tag => (
+          </select>
 
-              <option
-                key={tag._id}
-                value={tag._id}
-              >
-                {tag.name}
+
+
+          {/* TAGS */}
+          {mode === "reviews" && (
+
+            <select
+
+              value={tag}
+
+              onChange={(e) =>
+                setTag(
+                  e.target.value
+                )
+              }
+
+              className="
+              border
+              rounded-2xl
+              p-4
+              "
+            >
+
+              <option value="">
+                All Tags
               </option>
 
-            ))}
+              {tags?.map(tag => (
 
-          </select>
+                <option
+                  key={tag._id}
+                  value={tag._id}
+                >
+                  {tag.name}
+                </option>
+
+              ))}
+
+            </select>
+
+          )}
+
+
+
+          {/* USER */}
+          {mode === "reviews" && (
+
+            <input
+
+              type="text"
+
+              placeholder="Search user..."
+
+              value={user}
+
+              onChange={(e) =>
+                setUser(
+                  e.target.value
+                )
+              }
+
+              className="
+              border
+              rounded-2xl
+              p-4
+              "
+            />
+
+          )}
 
 
 
           {/* RATING */}
-          <select
-            value={rating}
-            onChange={(e) =>
-              setRating(
-                e.target.value
-              )
-            }
-            className="
-            border
-            rounded-2xl
-            p-4
-            "
-          >
+          {mode === "places" && (
 
-            <option value="">
-              Any Rating
-            </option>
+            <select
 
-            <option value="5">
-              5 Stars
-            </option>
+              value={rating}
 
-            <option value="4">
-              4+ Stars
-            </option>
+              onChange={(e) =>
+                setRating(
+                  e.target.value
+                )
+              }
 
-            <option value="3">
-              3+ Stars
-            </option>
+              className="
+              border
+              rounded-2xl
+              p-4
+              "
+            >
 
-          </select>
+              <option value="">
+                Any Rating
+              </option>
+
+              <option value="5">
+                5 Stars
+              </option>
+
+              <option value="4">
+                4+ Stars
+              </option>
+
+              <option value="3">
+                3+ Stars
+              </option>
+
+            </select>
+
+          )}
 
 
 
           {/* SORT */}
           <select
+
             value={sort}
+
             onChange={(e) =>
               setSort(
                 e.target.value
               )
             }
+
             className="
             border
             rounded-2xl
@@ -299,6 +524,22 @@ function Search() {
 
 
 
+        {/* LOADING */}
+        {loading && (
+
+          <div
+            className="
+            mt-10
+            text-center
+            "
+          >
+            Loading...
+          </div>
+
+        )}
+
+
+
         {/* RESULTS */}
         <div
           className="
@@ -311,14 +552,35 @@ function Search() {
           "
         >
 
-          {places?.map(place => (
+          {/* PLACES */}
+          {mode === "places" && (
 
-            <PlaceCard
-              key={place._id}
-              place={place}
-            />
+            results?.map(place => (
 
-          ))}
+              <PlaceCard
+                key={place._id}
+                place={place}
+              />
+
+            ))
+
+          )}
+
+
+
+          {/* REVIEWS */}
+          {mode === "reviews" && (
+
+            results?.map(review => (
+
+              <ReviewCard
+                key={review._id}
+                review={review}
+              />
+
+            ))
+
+          )}
 
         </div>
 
