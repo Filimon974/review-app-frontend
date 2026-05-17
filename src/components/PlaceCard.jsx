@@ -31,8 +31,8 @@ function PlaceCard({ place }) {
 >
   <img
     src={
-      place.photos?.[0] ||
-      "https://via.placeholder.com/400"
+      place.photos?.[0]
+      
     }
     alt={place.name}
     className="
