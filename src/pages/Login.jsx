@@ -251,8 +251,11 @@ const passwordRef = useRef();
             </Link>
 
           </p>
-
+            <p>email : admin@gmail.com</p>
+            <p>password : 1234</p>
         </form>
+
+        
 
       </div>
 
