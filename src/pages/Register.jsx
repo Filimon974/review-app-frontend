@@ -171,20 +171,31 @@ const passwordRef = useRef();
   "
 />
 
+         
+
           <button
+
             disabled={loading}
+
             className="
             w-full
             mt-6
-            bg-orange-500
+            bg-black
             text-white
             p-4
             rounded-2xl
             font-semibold
             "
           >
-            {loading ? "Creating account..." : "Register"}
+
+            {
+              loading
+                ? "Logging in..."
+                : "Register"
+            }
+
           </button>
+
 
           <p
             className="

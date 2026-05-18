@@ -1,11 +1,7 @@
 import heroImage from "../assets/hero.jpg";
 
-import {
-  FiSearch
-} from "react-icons/fi";
-import { Link } from "react-router-dom";
-
-
+import { Link }
+from "react-router-dom";
 
 function HeroSection() {
 
@@ -13,21 +9,25 @@ function HeroSection() {
 
     <section
       className="
-        relative
-        w-full
-        min-h-[70vh]
-        md:min-h-[85vh]
-        rounded-3xl
-        md:rounded-[40px]
-        overflow-hidden
-        mt-6
-        "
+      relative
+      overflow-hidden
+      rounded-[32px]
+      md:rounded-[44px]
+      min-h-[78vh]
+      md:min-h-[88vh]
+      mt-6
+      bg-black
+      "
     >
 
       {/* BACKGROUND IMAGE */}
       <img
         src={heroImage}
-        alt="Hero"
+        alt="Discover Ethiopia"
+        onError={(e) => {
+          e.currentTarget.src =
+            "https://placehold.co/1600x900?text=Discover+Ethiopia";
+        }}
         className="
         absolute
         inset-0
@@ -39,12 +39,15 @@ function HeroSection() {
 
 
 
-      {/* DARK OVERLAY */}
+      {/* OVERLAY */}
       <div
         className="
         absolute
         inset-0
-        bg-black/45
+        bg-gradient-to-b
+        from-black/50
+        via-black/40
+        to-black/70
         "
       />
 
@@ -59,24 +62,50 @@ function HeroSection() {
         flex-col
         items-center
         justify-center
-        h-full
         text-center
+        min-h-[78vh]
+        md:min-h-[88vh]
         px-6
+        md:px-10
         "
       >
+
+        {/* BADGE */}
+        <div
+          className="
+          mb-6
+          px-5
+          py-2
+          rounded-full
+          border
+          border-white/20
+          bg-white/10
+          backdrop-blur-md
+          text-white/90
+          text-sm
+          font-medium
+          tracking-wide
+          "
+        >
+          Explore • Review • Discover
+        </div>
+
+
 
         {/* TITLE */}
         <h1
           className="
           text-white
-          font-bold
-          leading-tight
-          text-[clamp(2.5rem,7vw,6rem)]
-          max-w-4xl
+          font-black
+          leading-[0.95]
+          tracking-tight
+          max-w-5xl
+          text-[clamp(3rem,8vw,7rem)]
           "
         >
-          Discover Ethiopia Through
-          Real Experiences
+          Discover Ethiopia
+          Through Real
+          Experiences
         </h1>
 
 
@@ -84,55 +113,18 @@ function HeroSection() {
         {/* SUBTITLE */}
         <p
           className="
-          text-white/90
-          mt-6
+          mt-7
+          max-w-2xl
+          text-white/80
           text-base
           md:text-xl
-          max-w-2xl
+          leading-relaxed
           "
         >
-          Find and review the best
-          restaurants, hotels, and
-          student-friendly places.
+          Find authentic reviews for restaurants,
+          hotels, cafés, resorts, and student-friendly
+          places across Ethiopia.
         </p>
-
-
-
-        {/* SEARCH BAR */}
-        {/* <div
-          className="
-          mt-8
-          bg-white
-          rounded-full
-          flex
-          items-center
-          px-5
-          py-4
-          w-full
-          max-w-2xl
-          "
-        >
-
-          <FiSearch
-            className="
-            text-gray-500
-            text-xl
-            "
-          />
-
-          <input
-            type="text"
-            placeholder="Search places..."
-            className="
-            ml-3
-            w-full
-            outline-none
-            text-gray-700
-            bg-transparent
-            "
-          />
-
-        </div> */}
 
 
 
@@ -141,50 +133,84 @@ function HeroSection() {
           className="
           flex
           flex-col
-          md:flex-row
+          sm:flex-row
+          items-center
           gap-4
-          mt-8
+          mt-10
           w-full
-          md:w-auto
+          sm:w-auto
           "
         >
-        <Link to="/search">
-          <button
+
+          {/* PRIMARY */}
+          <Link
+            to="/search"
             className="
-            bg-white
-            text-black
-            px-8
-            py-4
-            rounded-full
-            font-semibold
-            hover:bg-gray-200
-            transition
+            w-full
+            sm:w-auto
             "
           >
-            Explore Places
-          </button>
-        </Link>
-          
 
-
-        <Link to="/create-review">
             <button
+              className="
+              w-full
+              sm:w-auto
+              px-8
+              py-4
+              rounded-2xl
+              bg-white
+              text-black
+              font-semibold
+              text-lg
+              shadow-xl
+              hover:scale-[1.02]
+              hover:bg-gray-100
+              active:scale-[0.98]
+              transition-all
+              duration-300
+              "
+            >
+              Explore Places
+            </button>
+
+          </Link>
+
+
+
+          {/* SECONDARY */}
+          <Link
+            to="/create-review"
             className="
-            bg-orange-500
-            text-white
-            px-8
-            py-4
-            rounded-full
-            font-semibold
-            hover:bg-orange-600
-            transition
+            w-full
+            sm:w-auto
             "
           >
-            Write Review
-          </button>
 
-        </Link>
-          
+            <button
+              className="
+              w-full
+              sm:w-auto
+              px-8
+              py-4
+              rounded-2xl
+              bg-orange-500
+              text-white
+              font-semibold
+              text-lg
+              shadow-xl
+              shadow-orange-500/30
+              hover:bg-orange-600
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              transition-all
+              duration-300
+              "
+            >
+              Write Review
+            </button>
+
+          </Link>
+
         </div>
 
       </div>

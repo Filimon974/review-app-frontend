@@ -1,39 +1,33 @@
 import { useState } from "react";
 
-import MainLayout
-  from "../layouts/MainLayout";
+import MainLayout from "../layouts/MainLayout";
 
-import useFetch
-  from "../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 
-import API
-  from "../services/api";
+import API from "../services/api";
 
-import { useAuth }
-  from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 import {
   FiStar,
-  FiUpload
+  FiUpload,
+  FiImage
 } from "react-icons/fi";
-
-
 
 function CreateReview() {
 
   const { token } = useAuth();
 
-
-
-/*
+  /*
   =========================
-  FETCH Tags
+  FETCH TAGS
   =========================
   */
 
-const {
-  data: tags
-} = useFetch("/tags");
+  const {
+    data: tags
+  } = useFetch("/tags");
+
 
 
   /*
@@ -72,8 +66,9 @@ const {
   const [submitting, setSubmitting] =
     useState(false);
 
-    const [selectedTags, setSelectedTags] =
-  useState([]);
+  const [selectedTags, setSelectedTags] =
+    useState([]);
+
 
 
   /*
@@ -107,8 +102,6 @@ const {
           Array.from(e.target.files);
 
         setUploading(true);
-
-
 
         let uploadedPhotos = [];
 
@@ -229,6 +222,7 @@ const {
         setRating(0);
         setText("");
         setPhotos([]);
+        setSelectedTags([]);
 
       } catch (error) {
 
@@ -252,44 +246,98 @@ const {
 
       <section
         className="
-        max-w-3xl
+        max-w-4xl
         mx-auto
-        mt-10
+        px-4
+        py-10
         "
       >
 
         <div
           className="
           bg-white
-          rounded-3xl
-          p-8
+          border
+          border-gray-100
+          shadow-sm
+          rounded-[32px]
+          overflow-hidden
           "
         >
 
-          <h1
+          {/* HEADER */}
+          <div
             className="
-            text-4xl
-            font-bold
+            px-8
+            py-8
+            border-b
+            border-gray-100
+            bg-gradient-to-b
+            from-orange-50
+            to-white
             "
           >
-            Create Review
-          </h1>
+
+            <p
+              className="
+              text-sm
+              font-semibold
+              tracking-wide
+              uppercase
+              text-orange-500
+              "
+            >
+              Share Experience
+            </p>
+
+            <h1
+              className="
+              mt-2
+              text-4xl
+              md:text-5xl
+              font-bold
+              tracking-tight
+              text-gray-900
+              "
+            >
+              Create Review
+            </h1>
+
+            <p
+              className="
+              mt-3
+              text-gray-500
+              text-lg
+              max-w-2xl
+              "
+            >
+              Help others discover great places
+              by sharing your honest experience,
+              ratings, photos, and tags.
+            </p>
+
+          </div>
 
 
 
+          {/* FORM */}
           <form
             onSubmit={handleSubmit}
-            className="mt-8 space-y-6"
+            className="
+            p-8
+            space-y-10
+            "
           >
 
-            {/* PLACE SELECT */}
+            {/* PLACE */}
             <div>
 
               <label
                 className="
                 block
+                text-sm
                 font-semibold
-                mb-2
+                text-gray-700
+                mb-3
                 "
               >
                 Select Place
@@ -307,11 +355,18 @@ const {
 
                 className="
                 w-full
+                bg-gray-50
                 border
+                border-gray-200
                 rounded-2xl
-                px-4
+                px-5
                 py-4
+                text-gray-800
                 outline-none
+                transition
+                focus:border-orange-400
+                focus:ring-4
+                focus:ring-orange-100
                 "
               >
 
@@ -342,14 +397,22 @@ const {
               <label
                 className="
                 block
+                text-sm
                 font-semibold
-                mb-3
+                text-gray-700
+                mb-4
                 "
               >
-                Rating
+                Your Rating
               </label>
 
-              <div className="flex gap-3">
+              <div
+                className="
+                flex
+                items-center
+                gap-3
+                "
+              >
 
                 {[1,2,3,4,5].map(star => (
 
@@ -363,15 +426,22 @@ const {
                       setRating(star)
                     }
 
+                    className="
+                    transition
+                    hover:scale-110
+                    "
+
                   >
 
                     <FiStar
 
                       className={`
-                      text-3xl
+                      text-4xl
+                      transition
+
                       ${
                         star <= rating
-                          ? "text-yellow-500 fill-yellow-500"
+                          ? "text-orange-400 fill-orange-400"
                           : "text-gray-300"
                       }
                       `}
@@ -388,14 +458,16 @@ const {
 
 
 
-            {/* REVIEW TEXT */}
+            {/* REVIEW */}
             <div>
 
               <label
                 className="
                 block
+                text-sm
                 font-semibold
-                mb-2
+                text-gray-700
+                mb-3
                 "
               >
                 Review
@@ -419,13 +491,21 @@ const {
 
                 className="
                 w-full
+                bg-gray-50
                 border
+                border-gray-200
                 rounded-2xl
-                px-4
+                px-5
                 py-4
+                text-gray-800
                 outline-none
                 resize-none
+                transition
+                focus:border-orange-400
+                focus:ring-4
+                focus:ring-orange-100
                 "
+
               />
 
             </div>
@@ -438,36 +518,88 @@ const {
               <label
                 className="
                 block
+                text-sm
                 font-semibold
+                text-gray-700
                 mb-3
                 "
               >
-                Photos
+                Upload Photos
               </label>
 
               <label
                 className="
+                relative
                 flex
+                flex-col
                 items-center
                 justify-center
-                gap-3
+                gap-4
                 border-2
                 border-dashed
-                rounded-2xl
-                py-10
+                border-gray-200
+                rounded-[28px]
+                py-14
+                px-6
                 cursor-pointer
-                hover:bg-gray-50
+                bg-gray-50
+                hover:bg-orange-50
+                hover:border-orange-300
                 transition
+                overflow-hidden
                 "
               >
 
-                <FiUpload />
+                <div
+                  className="
+                  w-16
+                  h-16
+                  rounded-2xl
+                  bg-white
+                  border
+                  border-gray-200
+                  flex
+                  items-center
+                  justify-center
+                  shadow-sm
+                  "
+                >
 
-                {
-                  uploading
-                    ? "Uploading..."
-                    : "Upload Photos"
-                }
+                  <FiUpload
+                    className="
+                    text-2xl
+                    text-orange-500
+                    "
+                  />
+
+                </div>
+
+                <div className="text-center">
+
+                  <p
+                    className="
+                    font-semibold
+                    text-gray-800
+                    "
+                  >
+                    {
+                      uploading
+                        ? "Uploading..."
+                        : "Click to upload photos"
+                    }
+                  </p>
+
+                  <p
+                    className="
+                    mt-1
+                    text-sm
+                    text-gray-500
+                    "
+                  >
+                    PNG, JPG, WEBP supported
+                  </p>
+
+                </div>
 
                 <input
 
@@ -491,122 +623,196 @@ const {
 
 
 
-            {/* PREVIEW */}
+            {/* PHOTO PREVIEW */}
             {
               photos.length > 0 && (
 
-                <div
-                  className="
-                  grid
-                  grid-cols-2
-                  md:grid-cols-3
-                  gap-4
-                  "
-                >
+                <div>
 
-                  {photos.map((photo, i) => (
+                  <div
+                    className="
+                    flex
+                    items-center
+                    gap-2
+                    mb-5
+                    "
+                  >
 
-                    <img
-
-                      key={i}
-
-                      src={photo}
-
-                      alt="review"
-
+                    <FiImage
                       className="
-                      w-full
-                      h-40
-                      object-cover
-                      rounded-2xl
+                      text-orange-500
                       "
                     />
 
-                  ))}
+                    <h3
+                      className="
+                      font-semibold
+                      text-gray-800
+                      "
+                    >
+                      Uploaded Photos
+                    </h3>
+
+                  </div>
+
+                  <div
+                    className="
+                    grid
+                    grid-cols-2
+                    md:grid-cols-3
+                    gap-5
+                    "
+                  >
+
+                    {photos.map((photo, i) => (
+
+                      <div
+                        key={i}
+                        className="
+                        overflow-hidden
+                        rounded-3xl
+                        border
+                        border-gray-100
+                        bg-gray-100
+                        "
+                      >
+
+                        <img
+
+                          src={photo}
+
+                          alt="review"
+
+                          onError={(e) => {
+                            e.target.src =
+                              "https://via.placeholder.com/400x300?text=Image";
+                          }}
+
+                          className="
+                          w-full
+                          h-44
+                          object-cover
+                          hover:scale-105
+                          transition
+                          duration-300
+                          "
+
+                        />
+
+                      </div>
+
+                    ))}
+
+                  </div>
 
                 </div>
 
               )
             }
 
+
+
+            {/* TAGS */}
             <div>
 
-  <h3
-    className="
-    font-semibold
-    mb-3
-    "
-  >
-    Tags
-  </h3>
+              <h3
+                className="
+                text-sm
+                font-semibold
+                text-gray-700
+                mb-4
+                "
+              >
+                Tags
+              </h3>
 
-  <div
-    className="
-    flex
-    flex-wrap
-    gap-3
-    "
-  >
+              <div
+                className="
+                flex
+                flex-wrap
+                gap-3
+                "
+              >
 
-    {tags?.map(tag => (
+                {tags?.map(tag => (
 
-      <button
-        type="button"
-        key={tag._id}
-        onClick={() => {
+                  <button
 
-          if (
-            selectedTags.includes(
-              tag._id
-            )
-          ) {
+                    type="button"
 
-            setSelectedTags(
-              prev =>
-                prev.filter(
-                  id =>
-                    id !== tag._id
-                )
-            );
+                    key={tag._id}
 
-          } else {
+                    onClick={() => {
 
-            setSelectedTags(
-              prev => [
-                ...prev,
-                tag._id
-              ]
-            );
+                      if (
+                        selectedTags.includes(
+                          tag._id
+                        )
+                      ) {
 
-          }
+                        setSelectedTags(
+                          prev =>
+                            prev.filter(
+                              id =>
+                                id !== tag._id
+                            )
+                        );
 
-        }}
-        className={`
-        px-4
-        py-2
-        rounded-full
-        border
-        transition
+                      } else {
 
-        ${
-          selectedTags.includes(
-            tag._id
-          )
-            ? "bg-black text-white"
-            : "bg-white"
-        }
-        `}
-      >
+                        setSelectedTags(
+                          prev => [
+                            ...prev,
+                            tag._id
+                          ]
+                        );
 
-        {tag.name}
+                      }
 
-      </button>
+                    }}
 
-    ))}
+                    className={`
+                    px-5
+                    py-3
+                    rounded-full
+                    text-sm
+                    font-medium
+                    border
+                    transition-all
 
-  </div>
+                    ${
+                      selectedTags.includes(
+                        tag._id
+                      )
+                        ? `
+                          bg-orange-500
+                          text-white
+                          border-orange-500
+                          shadow-sm
+                        `
+                        : `
+                          bg-white
+                          text-gray-700
+                          border-gray-200
+                          hover:border-orange-300
+                          hover:text-orange-500
+                        `
+                    }
+                    `}
 
-</div>
+                  >
+
+                    {tag.name}
+
+                  </button>
+
+                ))}
+
+              </div>
+
+            </div>
+
+
 
             {/* SUBMIT */}
             <button
@@ -615,14 +821,17 @@ const {
 
               className="
               w-full
+              h-14
+              rounded-2xl
               bg-black
               text-white
-              py-4
-              rounded-2xl
               font-semibold
-              hover:opacity-90
+              text-lg
               transition
+              hover:opacity-90
+              disabled:opacity-60
               "
+
             >
 
               {

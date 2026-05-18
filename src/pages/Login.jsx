@@ -17,11 +17,9 @@ import {
 
 function Login() {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const { login } =
-    useAuth();
+  const { login } = useAuth();
 
 
 
@@ -37,8 +35,19 @@ function Login() {
   const [error, setError] =
     useState("");
 
+
+
   const emailRef = useRef();
-const passwordRef = useRef();
+
+  const passwordRef = useRef();
+
+
+
+  /*
+  =========================
+  LOGIN
+  =========================
+  */
 
   const handleSubmit =
     async (e) => {
@@ -60,17 +69,23 @@ const passwordRef = useRef();
             }
           );
 
+
+
         login(response.data);
 
-        if (response.data.role === "admin") {
 
-  navigate("/admin");
 
-} else {
+        if (
+          response.data.role === "admin"
+        ) {
 
-  navigate("/");
+          navigate("/admin");
 
-}
+        } else {
+
+          navigate("/");
+
+        }
 
       } catch (err) {
 
@@ -150,18 +165,28 @@ const passwordRef = useRef();
           <input
 
             ref={emailRef}
-  type="email"
-  placeholder="Email"
-  value={email}
-  onChange={(e) =>
-    setEmail(e.target.value)
-  }
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      passwordRef.current.focus();
-    }
-  }}
+
+            type="email"
+
+            placeholder="Email"
+
+            value={email}
+
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+
+            onKeyDown={(e) => {
+
+              if (e.key === "Enter") {
+
+                e.preventDefault();
+
+                passwordRef.current.focus();
+
+              }
+
+            }}
 
             className="
             w-full
@@ -179,17 +204,26 @@ const passwordRef = useRef();
           <input
 
             ref={passwordRef}
-  type="password"
-  placeholder="Password"
-  value={password}
-  onChange={(e) =>
-    setPassword(e.target.value)
-  }
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      handleSubmit(e);
-    }
-  }}
+
+            type="password"
+
+            placeholder="Password"
+
+            value={password}
+
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+
+            onKeyDown={(e) => {
+
+              if (e.key === "Enter") {
+
+                handleSubmit(e);
+
+              }
+
+            }}
 
             className="
             w-full
@@ -251,11 +285,26 @@ const passwordRef = useRef();
             </Link>
 
           </p>
-            <p>email : admin@gmail.com</p>
-            <p>password : 1234</p>
-        </form>
 
-        
+
+
+          {/* DEMO ACCOUNT */}
+          <div
+            className="
+            mt-6
+            text-sm
+            text-gray-500
+            text-center
+            "
+          >
+
+            <p>email: admin@gmail.com</p>
+
+            <p>password: 1234</p>
+
+          </div>
+
+        </form>
 
       </div>
 

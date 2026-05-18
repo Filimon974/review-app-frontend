@@ -13,7 +13,8 @@ import { useAuth } from "../context/AuthContext";
 import {
   FiStar,
   FiUpload,
-  FiX
+  FiX,
+  FiImage
 } from "react-icons/fi";
 
 
@@ -44,18 +45,6 @@ function EditReview() {
 
   /*
   =========================
-  FETCH TAGS
-  =========================
-  */
-
-  const {
-    data: tags
-  } = useFetch("/tags");
-
-
-
-  /*
-  =========================
   FORM STATE
   =========================
   */
@@ -67,9 +56,6 @@ function EditReview() {
     useState("");
 
   const [photos, setPhotos] =
-    useState([]);
-
-  const [selectedTags, setSelectedTags] =
     useState([]);
 
   const [uploading, setUploading] =
@@ -111,12 +97,6 @@ function EditReview() {
       setText(review.reviewText || "");
 
       setPhotos(review.photos || []);
-
-      setSelectedTags(
-        review.tags?.map(
-          tag => tag._id
-        ) || []
-      );
 
     }
 
@@ -217,13 +197,13 @@ function EditReview() {
 
   const handleRemovePhoto = (photoUrl) => {
 
-  setPhotos(prev =>
-    prev.filter(
-      photo => photo !== photoUrl
-    )
-  );
+    setPhotos(prev =>
+      prev.filter(
+        photo => photo !== photoUrl
+      )
+    );
 
-};
+  };
 
 
 
@@ -251,7 +231,6 @@ function EditReview() {
           {
             rating,
             reviewText: text,
-            tags: selectedTags,
             photos
           },
 
@@ -298,7 +277,15 @@ function EditReview() {
 
       <MainLayout>
 
-        <div className="mt-20 text-center">
+        <div
+          className="
+          min-h-screen
+          flex
+          items-center
+          justify-center
+          text-gray-500
+          "
+        >
           Loading...
         </div>
 
@@ -316,7 +303,15 @@ function EditReview() {
 
       <MainLayout>
 
-        <div className="mt-20 text-center text-red-500">
+        <div
+          className="
+          min-h-screen
+          flex
+          items-center
+          justify-center
+          text-red-500
+          "
+        >
           {error}
         </div>
 
@@ -334,34 +329,74 @@ function EditReview() {
 
       <section
         className="
-        max-w-3xl
+        max-w-4xl
         mx-auto
-        mt-10
+        py-8
+        md:py-12
         "
       >
 
-        <div
-          className="
-          bg-white
-          rounded-3xl
-          p-8
-          "
-        >
+        {/* HEADER */}
+        <div className="mb-8">
+
+          <p
+            className="
+            text-sm
+            font-semibold
+            uppercase
+            tracking-[0.2em]
+            text-orange-500
+            "
+          >
+            Update Experience
+          </p>
 
           <h1
             className="
             text-4xl
+            md:text-5xl
             font-bold
+            text-gray-900
+            mt-3
             "
           >
             Edit Review
           </h1>
 
+          <p
+            className="
+            text-gray-500
+            mt-4
+            text-base
+            md:text-lg
+            "
+          >
+            Improve your review and keep your experience updated.
+          </p>
 
+        </div>
+
+
+
+        {/* CARD */}
+        <div
+          className="
+          bg-white
+          border
+          border-gray-100
+          rounded-[32px]
+          shadow-sm
+          overflow-hidden
+          "
+        >
 
           <form
             onSubmit={handleSubmit}
-            className="mt-8 space-y-6"
+            className="
+            p-6
+            md:p-10
+            space-y-8
+            "
           >
 
             {/* RATING */}
@@ -370,14 +405,22 @@ function EditReview() {
               <label
                 className="
                 block
+                text-sm
                 font-semibold
-                mb-3
+                text-gray-700
+                mb-4
                 "
               >
                 Rating
               </label>
 
-              <div className="flex gap-3">
+              <div
+                className="
+                flex
+                items-center
+                gap-3
+                "
+              >
 
                 {[1,2,3,4,5].map(star => (
 
@@ -387,15 +430,20 @@ function EditReview() {
                     onClick={() =>
                       setRating(star)
                     }
+                    className="
+                    transition
+                    hover:scale-110
+                    "
                   >
 
                     <FiStar
                       className={`
-                      text-3xl
+                      text-[34px]
                       transition
+
                       ${
                         star <= rating
-                          ? "text-yellow-500 fill-yellow-500"
+                          ? "text-orange-500 fill-orange-500"
                           : "text-gray-300"
                       }
                       `}
@@ -417,115 +465,42 @@ function EditReview() {
               <label
                 className="
                 block
+                text-sm
                 font-semibold
-                mb-2
+                text-gray-700
+                mb-3
                 "
               >
-                Review
+                Your Review
               </label>
 
               <textarea
-                rows="6"
+                rows="7"
                 value={text}
                 onChange={(e) =>
                   setText(e.target.value)
                 }
                 placeholder="
-                Share your experience...
+Share your updated experience...
                 "
                 required
                 className="
                 w-full
+                bg-gray-50
                 border
-                rounded-2xl
-                px-4
-                py-4
+                border-gray-200
+                rounded-3xl
+                px-5
+                py-5
                 outline-none
                 resize-none
+                leading-relaxed
+                transition
+                focus:border-orange-400
+                focus:ring-4
+                focus:ring-orange-100
                 "
               />
-
-            </div>
-
-
-
-            {/* TAGS */}
-            <div>
-
-              <h3
-                className="
-                font-semibold
-                mb-3
-                "
-              >
-                Tags
-              </h3>
-
-              <div
-                className="
-                flex
-                flex-wrap
-                gap-3
-                "
-              >
-
-                {tags?.map(tag => (
-
-                  <button
-                    type="button"
-                    key={tag._id}
-                    onClick={() => {
-
-                      if (
-                        selectedTags.includes(
-                          tag._id
-                        )
-                      ) {
-
-                        setSelectedTags(
-                          prev =>
-                            prev.filter(
-                              id =>
-                                id !== tag._id
-                            )
-                        );
-
-                      } else {
-
-                        setSelectedTags(
-                          prev => [
-                            ...prev,
-                            tag._id
-                          ]
-                        );
-
-                      }
-
-                    }}
-                    className={`
-                    px-4
-                    py-2
-                    rounded-full
-                    border
-                    transition
-
-                    ${
-                      selectedTags.includes(
-                        tag._id
-                      )
-                        ? "bg-black text-white"
-                        : "bg-white"
-                    }
-                    `}
-                  >
-
-                    {tag.name}
-
-                  </button>
-
-                ))}
-
-              </div>
 
             </div>
 
@@ -537,7 +512,9 @@ function EditReview() {
               <label
                 className="
                 block
+                text-sm
                 font-semibold
+                text-gray-700
                 mb-3
                 "
               >
@@ -547,26 +524,66 @@ function EditReview() {
               <label
                 className="
                 flex
+                flex-col
                 items-center
                 justify-center
-                gap-3
                 border-2
                 border-dashed
-                rounded-2xl
-                py-10
+                border-gray-200
+                rounded-[28px]
+                py-14
+                px-6
                 cursor-pointer
-                hover:bg-gray-50
+                hover:bg-orange-50/40
+                hover:border-orange-300
                 transition
                 "
               >
 
-                <FiUpload />
+                <div
+                  className="
+                  w-16
+                  h-16
+                  rounded-full
+                  bg-orange-100
+                  flex
+                  items-center
+                  justify-center
+                  "
+                >
 
-                {
-                  uploading
-                    ? "Uploading..."
-                    : "Upload More Photos"
-                }
+                  <FiUpload
+                    className="
+                    text-2xl
+                    text-orange-500
+                    "
+                  />
+
+                </div>
+
+                <p
+                  className="
+                  mt-5
+                  font-semibold
+                  text-gray-800
+                  "
+                >
+                  {
+                    uploading
+                      ? "Uploading photos..."
+                      : "Upload More Photos"
+                  }
+                </p>
+
+                <p
+                  className="
+                  text-sm
+                  text-gray-500
+                  mt-2
+                  "
+                >
+                  PNG, JPG, WEBP supported
+                </p>
 
                 <input
                   type="file"
@@ -588,60 +605,98 @@ function EditReview() {
             {
               photos.length > 0 && (
 
-                <div
-                  className="
-                  grid
-                  grid-cols-2
-                  md:grid-cols-3
-                  gap-4
-                  "
-                >
+                <div>
 
-                  {photos.map((photo, i) => (
+                  <div
+                    className="
+                    flex
+                    items-center
+                    gap-2
+                    mb-4
+                    "
+                  >
 
-                    <div
-                      key={i}
-                      className="relative"
+                    <FiImage
+                      className="
+                      text-orange-500
+                      "
+                    />
+
+                    <h3
+                      className="
+                      font-semibold
+                      text-gray-800
+                      "
                     >
+                      Review Photos
+                    </h3>
 
-                      <img
-                        src={photo}
-                        alt="review"
+                  </div>
+
+
+
+                  <div
+                    className="
+                    grid
+                    grid-cols-2
+                    md:grid-cols-3
+                    gap-4
+                    "
+                  >
+
+                    {photos.map((photo, i) => (
+
+                      <div
+                        key={i}
                         className="
-                        w-full
-                        h-40
-                        object-cover
-                        rounded-2xl
-                        "
-                      />
-
-
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRemovePhoto(
-                            photo
-                          )
-                        }
-                        className="
-                        absolute
-                        top-2
-                        right-2
-                        bg-black
-                        text-white
-                        p-2
-                        rounded-full
+                        relative
+                        overflow-hidden
+                        rounded-3xl
+                        bg-gray-100
                         "
                       >
 
-                        <FiX />
+                        <img
+                          src={photo}
+                          alt="review"
+                          className="
+                          w-full
+                          h-44
+                          object-cover
+                          "
+                        />
 
-                      </button>
 
-                    </div>
 
-                  ))}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemovePhoto(
+                              photo
+                            )
+                          }
+                          className="
+                          absolute
+                          top-3
+                          right-3
+                          bg-black/80
+                          hover:bg-black
+                          text-white
+                          p-2
+                          rounded-full
+                          transition
+                          "
+                        >
+
+                          <FiX />
+
+                        </button>
+
+                      </div>
+
+                    ))}
+
+                  </div>
 
                 </div>
 
@@ -655,19 +710,22 @@ function EditReview() {
               disabled={submitting}
               className="
               w-full
-              bg-black
+              bg-orange-500
+              hover:bg-orange-600
+              disabled:opacity-70
               text-white
               py-4
-              rounded-2xl
+              rounded-full
               font-semibold
-              hover:opacity-90
+              text-lg
               transition
+              shadow-sm
               "
             >
 
               {
                 submitting
-                  ? "Updating..."
+                  ? "Updating Review..."
                   : "Update Review"
               }
 

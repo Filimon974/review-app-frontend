@@ -9,11 +9,11 @@ import {
   FiBookmark,
   FiStar,
   FiEdit,
-  FiTrash2
+  FiTrash2,
+  FiCamera
 } from "react-icons/fi";
 
 import { Link } from "react-router-dom";
-
 
 function Profile() {
 
@@ -27,175 +27,276 @@ function Profile() {
 
   const [uploading, setUploading] =
     useState(false);
+
   const CLOUD_NAME =
-  import.meta.env
-    .VITE_CLOUDINARY_CLOUD_NAME;
+    import.meta.env
+      .VITE_CLOUDINARY_CLOUD_NAME;
 
-const UPLOAD_PRESET =
-  import.meta.env
-    .VITE_CLOUDINARY_UPLOAD_PRESET;
+  const UPLOAD_PRESET =
+    import.meta.env
+      .VITE_CLOUDINARY_UPLOAD_PRESET;
 
-    const handleDeleteReview =
-  async (reviewId) => {
+  const handleDeleteReview =
+    async (reviewId) => {
 
-    const confirmDelete =
-      confirm(
-        "Delete this review?"
-      );
+      const confirmDelete =
+        confirm(
+          "Delete this review?"
+        );
 
-    if (!confirmDelete) return;
+      if (!confirmDelete) return;
 
-    try {
+      try {
 
-      await API.delete(
+        await API.delete(
 
-        `/reviews/${reviewId}`,
-
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`
-          }
-        }
-
-      );
-
-      window.location.reload();
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Failed to delete review");
-
-    }
-
-  };
-
-    const handleAvatarUpload =
-  async (e) => {
-
-    try {
-
-      const file =
-        e.target.files[0];
-
-      if (!file) return;
-
-      setUploading(true);
-
-
-
-      /*
-      ==========================
-      CLOUDINARY UPLOAD
-      ==========================
-      */
-
-      const formData =
-        new FormData();
-
-      formData.append(
-        "file",
-        file
-      );
-
-      formData.append(
-  "upload_preset",
-  UPLOAD_PRESET
-);
-
-
-
-      const cloudinaryRes =
-        await fetch(
-
-          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+          `/reviews/${reviewId}`,
 
           {
-            method: "POST",
-            body: formData
+            headers: {
+              Authorization:
+                `Bearer ${token}`
+            }
           }
 
         );
 
+        window.location.reload();
 
+      } catch (error) {
 
-      const cloudinaryData =
-        await cloudinaryRes.json();
+        console.log(error);
 
+        alert("Failed to delete review");
 
+      }
 
-      /*
-      ==========================
-      SAVE TO DATABASE
-      ==========================
-      */
+    };
 
-      await API.put(
+  const handleAvatarUpload =
+    async (e) => {
 
-        "/users/avatar",
+      try {
 
-        {
-          avatar:
-            cloudinaryData.secure_url
-        },
+        const file =
+          e.target.files[0];
 
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`
+        if (!file) return;
+
+        setUploading(true);
+
+        const formData =
+          new FormData();
+
+        formData.append(
+          "file",
+          file
+        );
+
+        formData.append(
+          "upload_preset",
+          UPLOAD_PRESET
+        );
+
+        const cloudinaryRes =
+          await fetch(
+
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+            {
+              method: "POST",
+              body: formData
+            }
+
+          );
+
+        const cloudinaryData =
+          await cloudinaryRes.json();
+
+        await API.put(
+
+          "/users/avatar",
+
+          {
+            avatar:
+              cloudinaryData.secure_url
+          },
+
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`
+            }
           }
-        }
 
-      );
+        );
 
+        window.location.reload();
 
+      } catch (error) {
 
-      window.location.reload();
+        console.log(error);
 
-    } catch (error) {
+        alert("Upload failed");
 
-      console.log(error);
+      } finally {
 
-      alert("Upload failed");
+        setUploading(false);
 
-    } finally {
+      }
 
-      setUploading(false);
+    };
 
-    }
-
-  };
-
+  /*
+  =========================
+  SKELETON LOADING
+  =========================
+  */
 
   if (loading) {
-    
+
     return (
+
       <MainLayout>
-        <div className="mt-20 text-center">
-          Loading profile...
-        </div>
+
+        <section className="mt-10 animate-pulse">
+
+          <div
+            className="
+            bg-white
+            border
+            border-gray-100
+            rounded-[32px]
+            p-8
+            shadow-sm
+            "
+          >
+
+            <div
+              className="
+              flex
+              flex-col
+              md:flex-row
+              gap-6
+              "
+            >
+
+              <div
+                className="
+                w-28
+                h-28
+                rounded-full
+                bg-gray-200
+                "
+              />
+
+              <div className="flex-1">
+
+                <div
+                  className="
+                  h-8
+                  w-56
+                  bg-gray-200
+                  rounded-xl
+                  "
+                />
+
+                <div
+                  className="
+                  h-5
+                  w-72
+                  bg-gray-100
+                  rounded-xl
+                  mt-4
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            <div
+              className="
+              grid
+              grid-cols-1
+              md:grid-cols-3
+              gap-5
+              mt-10
+              "
+            >
+
+              {[1, 2, 3].map(item => (
+
+                <div
+                  key={item}
+                  className="
+                  h-36
+                  rounded-3xl
+                  bg-gray-100
+                  "
+                />
+
+              ))}
+
+            </div>
+
+          </div>
+
+          <div
+            className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-3
+            gap-6
+            mt-12
+            "
+          >
+
+            {[1, 2, 3].map(item => (
+
+              <div
+                key={item}
+                className="
+                h-[420px]
+                rounded-3xl
+                bg-gray-100
+                "
+              />
+
+            ))}
+
+          </div>
+
+        </section>
+
       </MainLayout>
+
     );
 
   }
-
-
 
   if (error) {
 
     return (
+
       <MainLayout>
-        <div className="mt-20 text-center text-red-500">
+
+        <div
+          className="
+          mt-20
+          text-center
+          text-red-500
+          "
+        >
           {error}
         </div>
+
       </MainLayout>
+
     );
 
   }
-
-
 
   const {
     user,
@@ -203,20 +304,22 @@ const UPLOAD_PRESET =
     reviews
   } = data;
 
-
-
   return (
 
     <MainLayout>
 
-      <section className="mt-10">
+      <section className="mt-10 pb-16">
 
         {/* PROFILE HEADER */}
         <div
           className="
           bg-white
-          rounded-3xl
-          p-8
+          border
+          border-gray-100
+          rounded-[32px]
+          p-6
+          md:p-10
+          shadow-sm
           "
         >
 
@@ -224,70 +327,96 @@ const UPLOAD_PRESET =
             className="
             flex
             flex-col
-            md:flex-row
-            md:items-center
-            gap-6
+            lg:flex-row
+            lg:items-center
+            gap-8
             "
           >
 
             {/* AVATAR */}
             <div className="relative">
-                <img
 
-              src={
-                user.avatar ||
-                "https://i.pravatar.cc/300"
-              }
+              <img
 
-              alt={user.name}
+                src={
+                  user.avatar ||
+                  "https://i.pravatar.cc/300"
+                }
 
-              className="
-              w-28
-              h-28
-              rounded-full
-              object-cover
-              "
-            />
+                alt={user.name}
 
-            <label
-  className="
-  absolute
-  bottom-0
-  right-0
-  bg-black
-  text-white
-  p-2
-  rounded-full
-  cursor-pointer
-  "
->
-    {uploading ? "..." : "📷"}
-  <input
+                onError={(e) => {
+                  e.target.src =
+                    "https://i.pravatar.cc/300";
+                }}
 
-    type="file"
+                className="
+                w-32
+                h-32
+                rounded-full
+                object-cover
+                border-4
+                border-white
+                shadow-lg
+                "
+              />
 
-    accept="image/*"
+              <label
+                className="
+                absolute
+                bottom-1
+                right-1
+                w-11
+                h-11
+                rounded-full
+                bg-black
+                text-white
+                flex
+                items-center
+                justify-center
+                cursor-pointer
+                hover:scale-105
+                transition
+                shadow-lg
+                "
+              >
 
-    hidden
+                {
+                  uploading
+                    ? "..."
+                    : <FiCamera />
+                }
 
-    onChange={handleAvatarUpload}
+                <input
 
-  />
+                  type="file"
 
-</label>
+                  accept="image/*"
+
+                  hidden
+
+                  onChange={
+                    handleAvatarUpload
+                  }
+
+                />
+
+              </label>
 
             </div>
+
             
-
-
-
-            {/* INFO */}
             <div className="flex-1">
+
+              
 
               <h1
                 className="
                 text-4xl
-                font-bold
+                md:text-5xl
+                font-black
+                tracking-tight
+                text-gray-900
                 "
               >
                 {user.name}
@@ -296,7 +425,8 @@ const UPLOAD_PRESET =
               <p
                 className="
                 text-gray-500
-                mt-2
+                mt-3
+                text-lg
                 "
               >
                 {user.email}
@@ -304,19 +434,21 @@ const UPLOAD_PRESET =
 
             </div>
 
-
-
-            {/* EDIT BUTTON */}
+            {/* BUTTON */}
             <button
               className="
               flex
               items-center
+              justify-center
               gap-2
               bg-black
+              hover:bg-gray-900
               text-white
-              px-5
-              py-3
-              rounded-full
+              px-6
+              py-4
+              rounded-2xl
+              font-semibold
+              transition
               "
             >
 
@@ -327,8 +459,6 @@ const UPLOAD_PRESET =
             </button>
 
           </div>
-
-
 
           {/* STATS */}
           <div
@@ -341,11 +471,13 @@ const UPLOAD_PRESET =
             "
           >
 
-            {/* REVIEWS */}
+            {/* CARD */}
             <div
               className="
+              rounded-3xl
+              border
+              border-gray-100
               bg-gray-50
-              rounded-2xl
               p-6
               "
             >
@@ -356,6 +488,7 @@ const UPLOAD_PRESET =
                 items-center
                 gap-2
                 text-gray-500
+                font-medium
                 "
               >
 
@@ -367,9 +500,10 @@ const UPLOAD_PRESET =
 
               <h2
                 className="
-                text-4xl
-                font-bold
-                mt-3
+                text-5xl
+                font-black
+                mt-5
+                text-gray-900
                 "
               >
                 {stats.reviewsCount}
@@ -377,13 +511,12 @@ const UPLOAD_PRESET =
 
             </div>
 
-
-
-            {/* SAVED */}
             <div
               className="
+              rounded-3xl
+              border
+              border-gray-100
               bg-gray-50
-              rounded-2xl
               p-6
               "
             >
@@ -394,20 +527,22 @@ const UPLOAD_PRESET =
                 items-center
                 gap-2
                 text-gray-500
+                font-medium
                 "
               >
 
                 <FiBookmark />
 
-                Saved
+                Saved Places
 
               </div>
 
               <h2
                 className="
-                text-4xl
-                font-bold
-                mt-3
+                text-5xl
+                font-black
+                mt-5
+                text-gray-900
                 "
               >
                 {stats.savedCount}
@@ -415,13 +550,12 @@ const UPLOAD_PRESET =
 
             </div>
 
-
-
-            {/* LIKES */}
             <div
               className="
+              rounded-3xl
+              border
+              border-gray-100
               bg-gray-50
-              rounded-2xl
               p-6
               "
             >
@@ -432,18 +566,18 @@ const UPLOAD_PRESET =
                 items-center
                 gap-2
                 text-gray-500
+                font-medium
                 "
               >
-
                 ❤️ Likes Received
-
               </div>
 
               <h2
                 className="
-                text-4xl
-                font-bold
-                mt-3
+                text-5xl
+                font-black
+                mt-5
+                text-gray-900
                 "
               >
                 {stats.likesReceived}
@@ -455,118 +589,195 @@ const UPLOAD_PRESET =
 
         </div>
 
-
-
-        {/* USER REVIEWS */}
+        {/* REVIEWS */}
         <section className="mt-16">
-
-          <h2
-            className="
-            text-3xl
-            font-bold
-            "
-          >
-            Your Reviews
-          </h2>
-
-
 
           <div
             className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            xl:grid-cols-3
-            gap-6
-            mt-8
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-4
             "
           >
 
-            {reviews.map(review => (
+            <div>
 
-  <div
-    key={review._id}
-    className="
-bg-white
-rounded-3xl
-overflow-hidden
-p-2
-"
-  >
+              <h2
+                className="
+                text-3xl
+                md:text-4xl
+                font-black
+                text-gray-900
+                "
+              >
+                Your Reviews
+              </h2>
 
-    <ReviewCard
-      review={review}
-    />
+              <p
+                className="
+                text-gray-500
+                mt-2
+                "
+              >
+                Manage and edit your published reviews
+              </p>
 
-
-
-    {/* ACTIONS */}
-    {/* ACTION BUTTONS */}
-<div
-  className="
-  mt-4
-  flex
-  gap-3
-  "
->
-
-  {/* EDIT */}
-  <Link
-
-    to={`/reviews/edit/${review._id}`}
-
-    className="
-    flex-1
-    text-center
-    border
-    border-black
-    py-3
-    rounded-2xl
-    font-semibold
-    hover:bg-black
-    hover:text-white
-    transition
-    "
-  >
-
-    Edit
-
-  </Link>
-
-
-
-  {/* DELETE */}
-  <button
-
-    onClick={() =>
-      handleDeleteReview(
-        review._id
-      )
-    }
-
-    className="
-    flex-1
-    bg-red-500
-    text-white
-    py-3
-    rounded-2xl
-    font-semibold
-    hover:bg-red-600
-    transition
-    "
-  >
-
-    Delete
-
-  </button>
-
-</div>
-
-  </div>
-
-))}
+            </div>
 
           </div>
+
+          {
+            reviews.length === 0 ? (
+
+              <div
+                className="
+                mt-10
+                bg-white
+                border
+                border-dashed
+                border-gray-200
+                rounded-3xl
+                p-14
+                text-center
+                "
+              >
+
+                <h3
+                  className="
+                  text-2xl
+                  font-bold
+                  text-gray-900
+                  "
+                >
+                  No reviews yet
+                </h3>
+
+                <p
+                  className="
+                  text-gray-500
+                  mt-3
+                  "
+                >
+                  Start reviewing amazing places.
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div
+                className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                xl:grid-cols-3
+                gap-7
+                mt-10
+                "
+              >
+
+                {reviews.map(review => (
+
+                  <div
+
+                    key={review._id}
+
+                    className="
+                    bg-white
+                    rounded-[28px]
+                    border
+                    border-gray-100
+                    p-3
+                    shadow-sm
+                    hover:shadow-lg
+                    transition
+                    "
+                  >
+
+                    <ReviewCard
+                      review={review}
+                    />
+
+                    {/* ACTIONS */}
+                    <div
+                      className="
+                      mt-5
+                      flex
+                      gap-3
+                      "
+                    >
+
+                      <Link
+
+                        to={`/reviews/edit/${review._id}`}
+
+                        className="
+                        flex-1
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        border
+                        border-gray-200
+                        py-3.5
+                        rounded-2xl
+                        font-semibold
+                        hover:bg-black
+                        hover:text-white
+                        hover:border-black
+                        transition
+                        "
+                      >
+
+                        <FiEdit />
+
+                        Edit
+
+                      </Link>
+
+                      <button
+
+                        onClick={() =>
+                          handleDeleteReview(
+                            review._id
+                          )
+                        }
+
+                        className="
+                        flex-1
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        bg-red-500
+                        text-white
+                        py-3.5
+                        rounded-2xl
+                        font-semibold
+                        hover:bg-red-600
+                        transition
+                        "
+                      >
+
+                        <FiTrash2 />
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )
+          }
 
         </section>
 

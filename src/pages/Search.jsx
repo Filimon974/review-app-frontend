@@ -16,8 +16,6 @@ from "../components/PlaceCard";
 import ReviewCard
 from "../components/ReviewCard";
 
-
-
 function Search() {
 
   /*
@@ -30,8 +28,6 @@ function Search() {
     data: tags
   } = useFetch("/tags");
 
-
-
   /*
   =========================
   MODE
@@ -40,8 +36,6 @@ function Search() {
 
   const [mode, setMode] =
     useState("places");
-
-
 
   /*
   =========================
@@ -54,8 +48,6 @@ function Search() {
 
   const [loading, setLoading] =
     useState(false);
-
-
 
   /*
   =========================
@@ -81,8 +73,6 @@ function Search() {
   const [rating, setRating] =
     useState("");
 
-
-
   /*
   =========================
   FETCH DATA
@@ -97,8 +87,6 @@ function Search() {
         try {
 
           setLoading(true);
-
-
 
           /*
           =========================
@@ -129,8 +117,6 @@ function Search() {
             );
 
           }
-
-
 
           /*
           =========================
@@ -175,8 +161,6 @@ function Search() {
 
       };
 
-
-
     fetchData();
 
   }, [
@@ -191,32 +175,50 @@ function Search() {
 
   ]);
 
-
-
   return (
 
     <MainLayout>
 
-      <div className="mt-10">
+      <section className="mt-10 pb-16">
 
         {/* HEADER */}
         <div
           className="
           flex
           flex-col
-          md:flex-row
-          md:items-center
-          md:justify-between
-          gap-4
+          lg:flex-row
+          lg:items-end
+          lg:justify-between
+          gap-6
           "
         >
 
           <div>
 
+            <span
+              className="
+              inline-flex
+              items-center
+              rounded-full
+              bg-orange-100
+              text-orange-600
+              px-4
+              py-1.5
+              text-sm
+              font-semibold
+              "
+            >
+              Explore
+            </span>
+
             <h1
               className="
-              text-4xl
-              font-bold
+              text-5xl
+              md:text-6xl
+              font-black
+              tracking-tight
+              text-gray-900
+              mt-4
               "
             >
               Discover
@@ -224,24 +226,28 @@ function Search() {
 
             <p
               className="
+              text-lg
               text-gray-500
-              mt-2
+              mt-4
+              max-w-2xl
               "
             >
-              Explore places and experiences
+              Find the best places and authentic
+              experiences shared by the community.
             </p>
 
           </div>
-
-
 
           {/* MODE SWITCH */}
           <div
             className="
             flex
-            bg-gray-100
-            rounded-full
-            p-1
+            bg-white
+            border
+            border-gray-200
+            rounded-2xl
+            p-1.5
+            shadow-sm
             w-fit
             "
           >
@@ -253,22 +259,21 @@ function Search() {
               }
 
               className={`
-              px-5
-              py-2
-              rounded-full
-              transition
+              px-6
+              py-3
+              rounded-xl
+              font-semibold
+              transition-all
 
               ${
                 mode === "places"
-                  ? "bg-black text-white"
-                  : "text-gray-600"
+                  ? "bg-black text-white shadow-sm"
+                  : "text-gray-500 hover:text-black"
               }
               `}
             >
               Places
             </button>
-
-
 
             <button
 
@@ -277,15 +282,16 @@ function Search() {
               }
 
               className={`
-              px-5
-              py-2
-              rounded-full
-              transition
+              px-6
+              py-3
+              rounded-xl
+              font-semibold
+              transition-all
 
               ${
                 mode === "reviews"
-                  ? "bg-black text-white"
-                  : "text-gray-600"
+                  ? "bg-black text-white shadow-sm"
+                  : "text-gray-500 hover:text-black"
               }
               `}
             >
@@ -296,295 +302,449 @@ function Search() {
 
         </div>
 
-
-
         {/* FILTERS */}
         <div
           className="
+          mt-10
           bg-white
-          rounded-3xl
-          p-6
-          mt-8
-          grid
-          grid-cols-1
-          md:grid-cols-5
-          gap-4
+          border
+          border-gray-100
+          rounded-[32px]
+          p-5
+          md:p-7
+          shadow-sm
           "
         >
 
-          {/* SEARCH */}
-          <input
-            type="text"
-
-            placeholder={
-              mode === "places"
-                ? "Search places..."
-                : "Search reviews by place..."
-            }
-
-            value={search}
-
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
-            }
-
+          <div
             className="
-            border
-            rounded-2xl
-            p-4
-            "
-          />
-
-
-
-          {/* CATEGORY */}
-          <select
-
-            value={category}
-
-            onChange={(e) =>
-              setCategory(
-                e.target.value
-              )
-            }
-
-            className="
-            border
-            rounded-2xl
-            p-4
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-5
+            gap-4
             "
           >
 
-            <option value="">
-              All Categories
-            </option>
-
-            <option value="restaurant">
-              Restaurant
-            </option>
-
-            <option value="hotel">
-              Hotel
-            </option>
-
-            <option value="cafe">
-              Cafe
-            </option>
-
-          </select>
-
-
-
-          {/* TAGS */}
-          {mode === "reviews" && (
-
-            <select
-
-              value={tag}
-
-              onChange={(e) =>
-                setTag(
-                  e.target.value
-                )
-              }
-
-              className="
-              border
-              rounded-2xl
-              p-4
-              "
-            >
-
-              <option value="">
-                All Tags
-              </option>
-
-              {tags?.map(tag => (
-
-                <option
-                  key={tag._id}
-                  value={tag._id}
-                >
-                  {tag.name}
-                </option>
-
-              ))}
-
-            </select>
-
-          )}
-
-
-
-          {/* USER */}
-          {mode === "reviews" && (
-
+            {/* SEARCH */}
             <input
 
               type="text"
 
-              placeholder="Search user..."
+              placeholder={
+                mode === "places"
+                  ? "Search by place"
+                  : "Search by place"
+              }
 
-              value={user}
+              value={search}
 
               onChange={(e) =>
-                setUser(
+                setSearch(
                   e.target.value
                 )
               }
 
               className="
-              border
+              h-14
               rounded-2xl
-              p-4
+              border
+              border-gray-200
+              bg-gray-50
+              px-5
+              outline-none
+              focus:border-black
+              focus:bg-white
+              transition
               "
             />
 
-          )}
-
-
-
-          {/* RATING */}
-          {mode === "places" && (
-
+            {/* CATEGORY */}
             <select
 
-              value={rating}
+              value={category}
 
               onChange={(e) =>
-                setRating(
+                setCategory(
                   e.target.value
                 )
               }
 
               className="
-              border
+              h-14
               rounded-2xl
-              p-4
+              border
+              border-gray-200
+              bg-gray-50
+              px-5
+              outline-none
+              focus:border-black
+              focus:bg-white
+              transition
               "
             >
 
               <option value="">
-                Any Rating
+                All Categories
               </option>
 
-              <option value="5">
-                5 Stars
+              <option value="restaurant">
+                Restaurant
               </option>
 
-              <option value="4">
-                4+ Stars
+              <option value="hotel">
+                Hotel
               </option>
 
-              <option value="3">
-                3+ Stars
+              
+
+            </select>
+
+            {/* TAGS */}
+            {mode === "reviews" && (
+
+              <select
+
+                value={tag}
+
+                onChange={(e) =>
+                  setTag(
+                    e.target.value
+                  )
+                }
+
+                className="
+                h-14
+                rounded-2xl
+                border
+                border-gray-200
+                bg-gray-50
+                px-5
+                outline-none
+                focus:border-black
+                focus:bg-white
+                transition
+                "
+              >
+
+                <option value="">
+                  All Tags
+                </option>
+
+                {tags?.map(tag => (
+
+                  <option
+                    key={tag._id}
+                    value={tag._id}
+                  >
+                    {tag.name}
+                  </option>
+
+                ))}
+
+              </select>
+
+            )}
+
+            {/* USER */}
+            {mode === "reviews" && (
+
+              <input
+
+                type="text"
+
+                placeholder="Search by user"
+
+                value={user}
+
+                onChange={(e) =>
+                  setUser(
+                    e.target.value
+                  )
+                }
+
+                className="
+                h-14
+                rounded-2xl
+                border
+                border-gray-200
+                bg-gray-50
+                px-5
+                outline-none
+                focus:border-black
+                focus:bg-white
+                transition
+                "
+              />
+
+            )}
+
+            {/* RATING */}
+            {mode === "places" && (
+
+              <select
+
+                value={rating}
+
+                onChange={(e) =>
+                  setRating(
+                    e.target.value
+                  )
+                }
+
+                className="
+                h-14
+                rounded-2xl
+                border
+                border-gray-200
+                bg-gray-50
+                px-5
+                outline-none
+                focus:border-black
+                focus:bg-white
+                transition
+                "
+              >
+
+                <option value="">
+                  Any Rating
+                </option>
+
+                <option value="5">
+                  5 Stars
+                </option>
+
+                <option value="4">
+                  4+ Stars
+                </option>
+
+                <option value="3">
+                  3+ Stars
+                </option>
+
+              </select>
+
+            )}
+
+            {/* SORT */}
+            <select
+
+              value={sort}
+
+              onChange={(e) =>
+                setSort(
+                  e.target.value
+                )
+              }
+
+              className="
+              h-14
+              rounded-2xl
+              border
+              border-gray-200
+              bg-gray-50
+              px-5
+              outline-none
+              focus:border-black
+              focus:bg-white
+              transition
+              "
+            >
+
+              <option value="newest">
+                Newest
+              </option>
+
+              <option value="popular">
+                Popular
+              </option>
+
+              <option value="rating">
+                Highest Rated
               </option>
 
             </select>
 
-          )}
-
-
-
-          {/* SORT */}
-          <select
-
-            value={sort}
-
-            onChange={(e) =>
-              setSort(
-                e.target.value
-              )
-            }
-
-            className="
-            border
-            rounded-2xl
-            p-4
-            "
-          >
-
-            <option value="newest">
-              Newest
-            </option>
-
-            <option value="popular">
-              Popular
-            </option>
-
-            <option value="rating">
-              Highest Rated
-            </option>
-
-          </select>
+          </div>
 
         </div>
 
-
-
         {/* LOADING */}
-        {loading && (
+        {loading ? (
 
           <div
             className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-3
+            gap-7
             mt-10
-            text-center
             "
           >
-            Loading...
+
+            {[1,2,3,4,5,6].map(item => (
+
+              <div
+
+                key={item}
+
+                className="
+                bg-white
+                border
+                border-gray-100
+                rounded-[28px]
+                overflow-hidden
+                shadow-sm
+                animate-pulse
+                "
+              >
+
+                <div
+                  className="
+                  h-64
+                  bg-gray-200
+                  "
+                />
+
+                <div className="p-5">
+
+                  <div
+                    className="
+                    h-6
+                    w-2/3
+                    bg-gray-200
+                    rounded-lg
+                    "
+                  />
+
+                  <div
+                    className="
+                    h-4
+                    w-1/2
+                    bg-gray-100
+                    rounded-lg
+                    mt-4
+                    "
+                  />
+
+                  <div
+                    className="
+                    h-4
+                    w-full
+                    bg-gray-100
+                    rounded-lg
+                    mt-6
+                    "
+                  />
+
+                  <div
+                    className="
+                    h-4
+                    w-5/6
+                    bg-gray-100
+                    rounded-lg
+                    mt-3
+                    "
+                  />
+
+                </div>
+
+              </div>
+
+            ))}
+
           </div>
+
+        ) : (
+
+          <>
+            {/* EMPTY */}
+            {results?.length === 0 && (
+
+              <div
+                className="
+                mt-12
+                bg-white
+                border
+                border-dashed
+                border-gray-200
+                rounded-[32px]
+                p-16
+                text-center
+                "
+              >
+
+                <h2
+                  className="
+                  text-3xl
+                  font-bold
+                  text-gray-900
+                  "
+                >
+                  No results found
+                </h2>
+
+                <p
+                  className="
+                  text-gray-500
+                  mt-4
+                  "
+                >
+                  Try adjusting your search
+                  filters or keywords.
+                </p>
+
+              </div>
+
+            )}
+
+            {/* RESULTS */}
+            <div
+              className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              xl:grid-cols-3
+              gap-7
+              mt-10
+              "
+            >
+
+              {/* PLACES */}
+              {mode === "places" && (
+
+                results?.map(place => (
+
+                  <PlaceCard
+                    key={place._id}
+                    place={place}
+                  />
+
+                ))
+
+              )}
+
+              {/* REVIEWS */}
+              {mode === "reviews" && (
+
+                results?.map(review => (
+
+                  <ReviewCard
+                    key={review._id}
+                    review={review}
+                  />
+
+                ))
+
+              )}
+
+            </div>
+          </>
 
         )}
 
-
-
-        {/* RESULTS */}
-        <div
-          className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          xl:grid-cols-3
-          gap-6
-          mt-10
-          "
-        >
-
-          {/* PLACES */}
-          {mode === "places" && (
-
-            results?.map(place => (
-
-              <PlaceCard
-                key={place._id}
-                place={place}
-              />
-
-            ))
-
-          )}
-
-
-
-          {/* REVIEWS */}
-          {mode === "reviews" && (
-
-            results?.map(review => (
-
-              <ReviewCard
-                key={review._id}
-                review={review}
-              />
-
-            ))
-
-          )}
-
-        </div>
-
-      </div>
+      </section>
 
     </MainLayout>
 

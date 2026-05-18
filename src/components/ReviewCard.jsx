@@ -1,15 +1,22 @@
-import {FiHeart,FiMapPin,FiStar} from "react-icons/fi";
-import { useState } from "react";
-import API from "../services/api";
-import {useAuth} from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import {
+  FiHeart,
+  FiMapPin,
+  FiStar
+} from "react-icons/fi";
 
+import { useState } from "react";
+
+import API from "../services/api";
+
+import { useAuth }
+from "../context/AuthContext";
+
+import { Link }
+from "react-router-dom";
 
 function ReviewCard({ review }) {
 
   const { token } = useAuth();
-
-
 
   const [likes, setLikes] = useState(
     review.likes?.length || 0
@@ -21,230 +28,289 @@ function ReviewCard({ review }) {
   const [loading, setLoading] =
     useState(false);
 
-
-
   const handleLike = async (e) => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  e.stopPropagation();
+    e.stopPropagation();
 
-  try {
+    try {
 
-    setLoading(true);
+      setLoading(true);
 
-    if (!token) {
+      if (!token) {
 
-      alert("Login required");
+        alert("Login required");
 
-      return;
+        return;
 
-    }
-
-    await API.put(
-
-      `/reviews/like/${review._id}`,
-
-      {},
-
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`
-        }
       }
 
-    );
+      await API.put(
 
-    if (liked) {
+        `/reviews/like/${review._id}`,
 
-      setLikes(prev => prev - 1);
+        {},
 
-    } else {
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
 
-      setLikes(prev => prev + 1);
+      );
+
+      if (liked) {
+
+        setLikes(prev => prev - 1);
+
+      } else {
+
+        setLikes(prev => prev + 1);
+
+      }
+
+      setLiked(!liked);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
 
     }
 
-    setLiked(!liked);
-
-  } catch (error) {
-
-    console.log(error);
-
-  } finally {
-
-    setLoading(false);
-
-  }
-
-};
+  };
 
   return (
 
     <Link
       to={`/reviews/${review._id}`}
       className="
+      group
       bg-white
-      rounded-3xl
-      p-5
+      rounded-[32px]
+      overflow-hidden
+      border
+      border-gray-100
       shadow-sm
-      hover:shadow-lg
-      transition
+      hover:shadow-2xl
+      hover:-translate-y-1
+      transition-all
+      duration-300
+      flex
+      flex-col
       "
     >
 
-      {/* USER */}
+      {/* IMAGE */}
       <div
         className="
-        flex
-        items-center
-        justify-between
+        relative
+        w-full
+        aspect-[4/3]
+        overflow-hidden
+        bg-gray-100
         "
       >
 
-        <div>
-
-          <h3
-            className="
-            font-bold
-            text-lg
-            "
-          >
-            {review.user?.username  || "Anonymous"}
-          </h3>
-
-          <div
-            className="
-            flex
-            items-center
-            gap-1
-            text-sm
-            text-gray-500
-            mt-1
-            "
-          >
-
-            <FiMapPin />
-
-            {review.place?.location}
-
-          </div>
-
-        </div>
-
-
+        <img
+          src={
+            review.photos?.[0] ||
+            "https://placehold.co/800x600?text=No+Image"
+          }
+          alt="Review"
+          onError={(e) => {
+            e.target.src =
+              "https://placehold.co/800x600?text=No+Image";
+          }}
+          className="
+          w-full
+          h-full
+          object-cover
+          group-hover:scale-105
+          transition-transform
+          duration-500
+          "
+        />
 
         {/* RATING */}
         <div
           className="
+          absolute
+          top-4
+          right-4
+          bg-white/95
+          backdrop-blur-md
+          px-3
+          py-1.5
+          rounded-full
           flex
           items-center
           gap-1
-          bg-orange-100
-          text-orange-600
-          px-3
-          py-1
-          rounded-full
+          text-sm
           font-semibold
+          shadow-md
           "
         >
 
           {review.rating}
 
-          <FiStar className="fill-orange-500" />
+          <FiStar
+            className="
+            text-orange-500
+            fill-orange-500
+            "
+          />
 
         </div>
 
       </div>
 
-
-
-      {/* REVIEW TEXT */}
-      <p
-        className="
-        text-gray-700
-        mt-4
-        leading-relaxed
-        "
-      >
-        {review.comment}
-      </p>
-
-
-
-      
-      {/* PHOTO */}
-{review.photos?.[0] && (
-  <img
-    src={review.photos[0]}
-    alt="Review"
-    className="
-    w-full
-    h-[260px]
-    object-contain
-    bg-gray-50
-    rounded-2xl
-    mt-4
-    "
-  />
-)}
-
-
-
-
-      {/* FOOTER */}
+      {/* CONTENT */}
       <div
         className="
         flex
-        items-center
-        justify-between
-        mt-5
+        flex-col
+        flex-1
+        p-6
         "
       >
 
+        {/* USER */}
         <div
           className="
-          text-sm
-          text-gray-500
+          flex
+          items-start
+          justify-between
+          gap-4
           "
         >
-          {review.place?.name}
+
+          <div>
+
+            <h3
+              className="
+              text-lg
+              font-bold
+              text-gray-900
+              "
+            >
+              {review.user?.username || "Anonymous"}
+            </h3>
+
+            <div
+              className="
+              flex
+              items-center
+              gap-1
+              mt-1
+              text-sm
+              text-gray-500
+              "
+            >
+
+              <FiMapPin />
+
+              <span>
+                {review.place?.location}
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
 
+        {/* REVIEW TEXT */}
+        <p
+          className="
+          mt-4
+          text-[15px]
+          leading-7
+          text-gray-600
+          line-clamp-4
+          "
+        >
+          {review.comment}
+        </p>
 
+        {/* FOOTER */}
+        <div
+          className="
+          mt-auto
+          pt-6
+          flex
+          items-center
+          justify-between
+          "
+        >
 
-         <button
+          <div>
 
-  onClick={handleLike}
+            <p
+              className="
+              text-sm
+              text-gray-400
+              "
+            >
+              Reviewed Place
+            </p>
 
-  disabled={loading}
+            <h4
+              className="
+              font-semibold
+              text-gray-900
+              "
+            >
+              {review.place?.name}
+            </h4>
 
-  className={`
-  flex
-  items-center
-  gap-2
-  transition
+          </div>
 
-  ${
-    liked
-      ? "text-red-500"
-      : "text-gray-600"
-  }
+          <button
 
-  hover:text-red-500
-  `}
->
+            onClick={handleLike}
 
-          <FiHeart
-            className={
-                liked ? "fill-red-500" : ""
+            disabled={loading}
+
+            className={`
+            h-11
+            px-4
+            rounded-full
+            flex
+            items-center
+            gap-2
+            transition-all
+
+            ${
+              liked
+                ? "bg-red-50 text-red-500"
+                : "bg-gray-100 text-gray-600"
             }
-     />
 
-          {likes}
+            hover:scale-105
+            `}
+          >
 
-        </button>
+            <FiHeart
+              className={
+                liked
+                  ? "fill-red-500"
+                  : ""
+              }
+            />
+
+            <span className="font-medium">
+              {likes}
+            </span>
+
+          </button>
+
+        </div>
 
       </div>
 

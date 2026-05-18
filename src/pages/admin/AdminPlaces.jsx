@@ -5,7 +5,6 @@ import API from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 
-
 function AdminPlaces() {
 
   const { token } = useAuth();
@@ -15,11 +14,6 @@ function AdminPlaces() {
     loading,
     error
   } = useFetch("/places");
-
-  const {
-  data: tags
-} = useFetch("/tags");
-
 
   /*
   =========================
@@ -48,10 +42,6 @@ function AdminPlaces() {
   const [uploading, setUploading] =
     useState(false);
 
-  const [selectedTags, setSelectedTags] = 
-    useState([]);
-
-
   /*
   =========================
   CLOUDINARY
@@ -65,87 +55,6 @@ function AdminPlaces() {
   const UPLOAD_PRESET =
     import.meta.env
       .VITE_CLOUDINARY_UPLOAD_PRESET;
-
-{/* TAGS */}
-
-<div>
-
-  <h3
-    className="
-    font-semibold
-    mb-3
-    "
-  >
-    Tags
-  </h3>
-
-  <div
-    className="
-    flex
-    flex-wrap
-    gap-3
-    "
-  >
-
-    {tags?.map(tag => (
-
-      <button
-        type="button"
-        key={tag._id}
-        onClick={() => {
-
-          if (
-            selectedTags.includes(
-              tag._id
-            )
-          ) {
-
-            setSelectedTags(
-              prev =>
-                prev.filter(
-                  id =>
-                    id !== tag._id
-                )
-            );
-
-          } else {
-
-            setSelectedTags(
-              prev => [
-                ...prev,
-                tag._id
-              ]
-            );
-
-          }
-
-        }}
-        className={`
-        px-4
-        py-2
-        rounded-full
-        border
-        transition
-
-        ${
-          selectedTags.includes(
-            tag._id
-          )
-            ? "bg-black text-white"
-            : "bg-white"
-        }
-        `}
-      >
-
-        {tag.name}
-
-      </button>
-
-    ))}
-
-  </div>
-
-</div>
 
   /*
   =========================
@@ -178,8 +87,6 @@ function AdminPlaces() {
           UPLOAD_PRESET
         );
 
-
-
         const response =
           await fetch(
 
@@ -191,8 +98,6 @@ function AdminPlaces() {
             }
 
           );
-
-
 
         const data =
           await response.json();
@@ -212,8 +117,6 @@ function AdminPlaces() {
       }
 
     };
-
-
 
   /*
   =========================
@@ -238,8 +141,7 @@ function AdminPlaces() {
             description,
             location,
             contactInfo,
-            photos: [photo],
-            tags: selectedTags
+            photos: [photo]
           },
 
           {
@@ -265,8 +167,6 @@ function AdminPlaces() {
 
     };
 
-
-
   /*
   =========================
   DELETE PLACE
@@ -282,8 +182,6 @@ function AdminPlaces() {
         );
 
       if (!confirmDelete) return;
-
-
 
       try {
 
@@ -309,8 +207,6 @@ function AdminPlaces() {
       }
 
     };
-
-
 
   return (
 
@@ -351,61 +247,166 @@ function AdminPlaces() {
 
         </div>
 
+        {/* LOADING */}
+        {loading && (
 
+          <div
+            className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-6
+            mt-10
+            "
+          >
+
+            {[...Array(4)].map((_, i) => (
+
+              <div
+                key={i}
+                className="
+                animate-pulse
+                bg-white
+                rounded-3xl
+                overflow-hidden
+                "
+              >
+
+                <div
+                  className="
+                  h-56
+                  bg-gray-200
+                  "
+                />
+
+                <div className="p-5">
+
+                  <div
+                    className="
+                    h-6
+                    w-40
+                    bg-gray-200
+                    rounded-full
+                    "
+                  />
+
+                  <div
+                    className="
+                    h-4
+                    w-24
+                    bg-gray-100
+                    rounded-full
+                    mt-4
+                    "
+                  />
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        )}
+
+        {/* ERROR */}
+        {error && (
+
+          <div
+            className="
+            mt-10
+            bg-red-50
+            border
+            border-red-200
+            text-red-500
+            rounded-3xl
+            p-6
+            "
+          >
+            {error}
+          </div>
+
+        )}
 
         {/* CREATE FORM */}
         <form
           onSubmit={handleCreatePlace}
           className="
           bg-white
-          rounded-3xl
-          p-8
+          rounded-[32px]
+          p-6
+          md:p-8
           mt-10
+          border
+          border-gray-100
+          shadow-sm
           space-y-5
           "
         >
 
-          <input
-            type="text"
-            placeholder="Place name"
-            value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
+          <div
             className="
-            w-full
-            border
-            rounded-2xl
-            p-4
-            "
-          />
-
-
-
-          <select
-            value={category}
-            onChange={(e) =>
-              setCategory(e.target.value)
-            }
-            className="
-            w-full
-            border
-            rounded-2xl
-            p-4
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-5
             "
           >
 
-            <option value="restaurant">
-              Restaurant
-            </option>
+            <input
+              type="text"
+              placeholder="Place name"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+              className="
+              w-full
+              bg-gray-50
+              border
+              border-gray-200
+              rounded-2xl
+              px-5
+              py-4
+              outline-none
+              focus:border-orange-500
+              focus:bg-white
+              transition
+              "
+            />
 
-            <option value="hotel">
-              Hotel
-            </option>
+            <select
+              value={category}
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
+              className="
+              w-full
+              bg-gray-50
+              border
+              border-gray-200
+              rounded-2xl
+              px-5
+              py-4
+              outline-none
+              focus:border-orange-500
+              focus:bg-white
+              transition
+              "
+            >
 
-          </select>
+              <option value="restaurant">
+                Restaurant
+              </option>
 
+              <option value="hotel">
+                Hotel
+              </option>
 
+            </select>
+
+          </div>
 
           <textarea
             placeholder="Description"
@@ -417,153 +418,190 @@ function AdminPlaces() {
             }
             className="
             w-full
+            bg-gray-50
             border
+            border-gray-200
             rounded-2xl
-            p-4
-            h-32
+            px-5
+            py-4
+            h-36
+            outline-none
+            resize-none
+            focus:border-orange-500
+            focus:bg-white
+            transition
             "
           />
 
-
-
-          <input
-            type="text"
-            placeholder="Location"
-            value={location}
-            onChange={(e) =>
-              setLocation(
-                e.target.value
-              )
-            }
+          <div
             className="
-            w-full
-            border
-            rounded-2xl
-            p-4
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-5
             "
-          />
+          >
 
+            <input
+              type="text"
+              placeholder="Location"
+              value={location}
+              onChange={(e) =>
+                setLocation(
+                  e.target.value
+                )
+              }
+              className="
+              w-full
+              bg-gray-50
+              border
+              border-gray-200
+              rounded-2xl
+              px-5
+              py-4
+              outline-none
+              focus:border-orange-500
+              focus:bg-white
+              transition
+              "
+            />
 
+            <input
+              type="text"
+              placeholder="Contact info"
+              value={contactInfo}
+              onChange={(e) =>
+                setContactInfo(
+                  e.target.value
+                )
+              }
+              className="
+              w-full
+              bg-gray-50
+              border
+              border-gray-200
+              rounded-2xl
+              px-5
+              py-4
+              outline-none
+              focus:border-orange-500
+              focus:bg-white
+              transition
+              "
+            />
 
-          <input
-            type="text"
-            placeholder="Contact info"
-            value={contactInfo}
-            onChange={(e) =>
-              setContactInfo(
-                e.target.value
-              )
-            }
-            className="
-            w-full
-            border
-            rounded-2xl
-            p-4
-            "
-          />
-
-
+          </div>
 
           {/* IMAGE */}
-<div>
+          <div>
 
-  <label
-    className="
-    block
-    font-semibold
-    mb-3
-    "
-  >
-    Place Image
-  </label>
+            <label
+              className="
+              block
+              text-lg
+              font-semibold
+              mb-4
+              "
+            >
+              Place Image
+            </label>
 
-  <label
-    className="
-    flex
-    flex-col
-    items-center
-    justify-center
-    border-2
-    border-dashed
-    border-gray-300
-    rounded-3xl
-    p-10
-    cursor-pointer
-    hover:bg-gray-50
-    transition
-    "
-  >
+            <label
+              className="
+              flex
+              flex-col
+              items-center
+              justify-center
+              border-2
+              border-dashed
+              border-gray-200
+              rounded-[28px]
+              p-10
+              cursor-pointer
+              bg-gray-50
+              hover:bg-orange-50
+              hover:border-orange-300
+              transition
+              "
+            >
 
-    <div
-      className="
-      text-5xl
-      "
-    >
-      📷
-    </div>
+              <div
+                className="
+                text-5xl
+                "
+              >
+                📷
+              </div>
 
-    <p
-      className="
-      mt-4
-      font-medium
-      "
-    >
-      {
-        uploading
-          ? "Uploading..."
-          : "Click to upload image"
-      }
-    </p>
+              <p
+                className="
+                mt-4
+                text-lg
+                font-semibold
+                text-gray-800
+                "
+              >
+                {
+                  uploading
+                    ? "Uploading image..."
+                    : "Click to upload image"
+                }
+              </p>
 
-    <p
-      className="
-      text-sm
-      text-gray-500
-      mt-1
-      "
-    >
-      PNG, JPG, WEBP
-    </p>
+              <p
+                className="
+                text-sm
+                text-gray-500
+                mt-2
+                "
+              >
+                PNG, JPG, WEBP supported
+              </p>
 
-    <input
-      type="file"
-      hidden
-      accept="image/*"
-      onChange={handleImageUpload}
-    />
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
 
-  </label>
+            </label>
 
-  {photo && (
+            {photo && (
 
-    <div className="mt-6">
+              <div className="mt-6">
 
-      <img
-        src={photo}
-        alt="Preview"
-        className="
-        w-full
-        h-72
-        object-cover
-        rounded-3xl
-        "
-      />
+                <img
+                  src={photo}
+                  alt="Preview"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://placehold.co/1200x800?text=Image";
+                  }}
+                  className="
+                  w-full
+                  h-72
+                  object-cover
+                  rounded-[28px]
+                  "
+                />
 
-    </div>
+              </div>
 
-  )}
+            )}
 
-</div>
-
-
+          </div>
 
           <button
             className="
-            bg-black
+            bg-orange-500
+            hover:bg-orange-600
             text-white
-            px-6
+            px-8
             py-4
             rounded-full
+            font-semibold
+            transition
             "
           >
 
@@ -573,13 +611,10 @@ function AdminPlaces() {
 
         </form>
 
-            
-
-
         {/* PLACE LIST */}
         <div
           className="
-          mt-12
+          mt-14
           grid
           grid-cols-1
           md:grid-cols-2
@@ -593,29 +628,41 @@ function AdminPlaces() {
               key={place._id}
               className="
               bg-white
-              rounded-3xl
+              rounded-[30px]
               overflow-hidden
+              border
+              border-gray-100
+              shadow-sm
+              hover:shadow-xl
+              transition
+              duration-300
               "
             >
 
               <img
-                src={place.photos?.[0]}
+                src={
+                  place.photos?.[0] ||
+                  "https://placehold.co/1200x800?text=Place"
+                }
                 alt={place.name}
+                onError={(e) => {
+                  e.target.src =
+                    "https://placehold.co/1200x800?text=Place";
+                }}
                 className="
                 w-full
-                h-56
+                h-64
                 object-cover
                 "
               />
 
-
-
-              <div className="p-5">
+              <div className="p-6">
 
                 <h2
                   className="
                   text-2xl
                   font-bold
+                  text-gray-900
                   "
                 >
                   {place.name}
@@ -630,51 +677,54 @@ function AdminPlaces() {
                   {place.location}
                 </p>
 
-
-
                 <div
-  className="
-  flex
-  gap-3
-  mt-5
-  "
->
+                  className="
+                  flex
+                  items-center
+                  gap-3
+                  mt-6
+                  "
+                >
 
-  {/* EDIT */}
-  <Link
-    to={`/admin/places/edit/${place._id}`}
-    className="
-    bg-black
-    text-white
-    px-4
-    py-2
-    rounded-full
-    "
-  >
-    Edit
-  </Link>
+                  {/* EDIT */}
+                  <Link
+                    to={`/admin/places/edit/${place._id}`}
+                    className="
+                    bg-black
+                    hover:bg-gray-800
+                    text-white
+                    px-5
+                    py-3
+                    rounded-full
+                    font-medium
+                    transition
+                    "
+                  >
+                    Edit
+                  </Link>
 
+                  {/* DELETE */}
+                  <button
+                    onClick={() =>
+                      handleDelete(
+                        place._id
+                      )
+                    }
+                    className="
+                    bg-red-500
+                    hover:bg-red-600
+                    text-white
+                    px-5
+                    py-3
+                    rounded-full
+                    font-medium
+                    transition
+                    "
+                  >
+                    Delete
+                  </button>
 
-
-  {/* DELETE */}
-  <button
-    onClick={() =>
-      handleDelete(
-        place._id
-      )
-    }
-    className="
-    bg-red-500
-    text-white
-    px-4
-    py-2
-    rounded-full
-    "
-  >
-    Delete
-  </button>
-
-</div>
+                </div>
 
               </div>
 
