@@ -392,8 +392,8 @@ function PlaceDetails() {
                 "https://via.placeholder.com/1400x700";
             }}
             className="
-            w-50%
-            h-[90vh]
+            w-full
+            h-[50vh]
             md:h-[65vh]
             object-cover
             "
