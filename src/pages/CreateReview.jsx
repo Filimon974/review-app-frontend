@@ -226,15 +226,15 @@ function CreateReview() {
 
       } catch (error) {
 
-        console.log(error);
+  console.log(error);
 
-        alert("Failed to create review");
+  alert("Failed to create review");
 
-      } finally {
+} finally {
 
-        setSubmitting(false);
+  setSubmitting(false);
 
-      }
+}
 
     };
 
